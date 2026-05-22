@@ -1,0 +1,38 @@
+<!-- features/login/ui/login-form/login-form.component.html -->
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <label class="field">
+    <span class="field__label">Usuario</span>
+    <input
+      class="field__input"
+      type="text"
+      formControlName="username"
+      autocomplete="username"
+      [attr.aria-invalid]="form.controls.username.touched && form.controls.username.invalid"
+    />
+    @if (form.controls.username.touched && form.controls.username.invalid) {
+      <span class="field__error" role="alert">El usuario es obligatorio.</span>
+    }
+  </label>
+
+  <label class="field">
+    <span class="field__label">Contraseña</span>
+    <input
+      class="field__input"
+      type="password"
+      formControlName="password"
+      autocomplete="current-password"
+      [attr.aria-invalid]="form.controls.password.touched && form.controls.password.invalid"
+    />
+    @if (form.controls.password.touched && form.controls.password.invalid) {
+      <span class="field__error" role="alert">Mínimo 6 caracteres.</span>
+    }
+  </label>
+
+  @if (errorMessage()) {
+    <p class="form__alert" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <button class="btn" type="submit" [disabled]="loading()">
+    {{ loading() ? 'Ingresando…' : 'Iniciar sesión' }}
+  </button>
+</form>

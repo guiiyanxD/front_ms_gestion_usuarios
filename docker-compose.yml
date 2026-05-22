@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  shell:
+    build:
+      context: .
+      dockerfile: apps/shell/Dockerfile
+    container_name: gestion-shell
+    ports:
+      - "4200:80"
+    environment:
+      - API_GATEWAY_URL=http://api-gateway:8080/api
+    # depends_on / networks: enlaza aquí el API Gateway y los MFEs remotos
+    # cuando los generemos, manteniendo el stack integrado.

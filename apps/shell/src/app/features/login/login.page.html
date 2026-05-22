@@ -1,0 +1,16 @@
+<!-- features/login/login.page.html -->
+<main class="auth">
+  <section class="auth__card" aria-labelledby="auth-title">
+    <header class="auth__head">
+      <div class="auth__logo" aria-hidden="true">G</div>
+      <h1 id="auth-title" class="auth__title">Sistema de Gestión</h1>
+      <p class="auth__subtitle">Ingresa tus credenciales para continuar</p>
+    </header>
+
+    <app-login-form
+      [loading]="loading() === 'loading'"
+      [errorMessage]="error()"
+      (submitted)="onSubmit($event)"
+    />
+  </section>
+</main>
