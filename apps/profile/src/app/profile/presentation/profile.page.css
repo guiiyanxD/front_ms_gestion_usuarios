@@ -1,0 +1,10 @@
+.profile {
+  min-height: 100%;
+  display: grid;
+  place-items: start center;
+  padding: var(--space-3, 24px);
+  background: var(--color-surface, #f1f5f9);
+  font-family: var(--font, system-ui, sans-serif);
+}
+.profile__msg { color: var(--color-ink, #0f172a); font-size: 15px; }
+.profile__msg--error { color: #dc2626; }

@@ -1,0 +1,24 @@
+<article class="card">
+  <header class="card__head">
+    <div class="card__avatar" aria-hidden="true">
+      {{ profile().fullName.charAt(0) }}
+    </div>
+    <div>
+      <h2 class="card__name">{{ profile().fullName }}</h2>
+      <p class="card__user">&#64;{{ profile().username }}</p>
+    </div>
+  </header>
+
+  <dl class="card__details">
+    <div class="card__row">
+      <dt class="card__label">Correo</dt>
+      <dd class="card__value">{{ profile().email }}</dd>
+    </div>
+    <div class="card__row">
+      <dt class="card__label">Roles</dt>
+      <dd class="card__value">
+        @for (role of profile().roles; track role) { <span class="chip">{{ role }}</span> }
+      </dd>
+    </div>
+  </dl>
+</article>

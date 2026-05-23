@@ -1,9 +1,12 @@
 import { Route } from '@angular/router';
+import { provideProfile } from './profile/profile.providers';
+import { ProfilePage } from './profile/presentation/profile.page';
+
 
 export const appRoutes: Route[] = [
   {
     path: '',
-    loadChildren: () =>
-      import('./remote-entry/entry.routes').then((m) => m.remoteRoutes),
+    component: ProfilePage,
+    providers: [...provideProfile()],
   },
 ];

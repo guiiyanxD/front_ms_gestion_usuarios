@@ -9,7 +9,9 @@ export const appRoutes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('profile/Routes').then((m) => m!.remoteRoutes),
+    canActivate: [authGuard],   // ← añade esta línea
+    loadChildren: () =>
+      import('profile/Routes').then((m) => m.remoteRoutes),
   },
   {
     path: '',
