@@ -1,0 +1,17 @@
+.roles { padding: var(--space-3, 24px); font-family: var(--font, system-ui, sans-serif); }
+.roles__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.roles__title { color: var(--color-ink, #0f172a); font-size: 22px; margin: 0; }
+.roles__msg { color: var(--color-ink, #0f172a); }
+.roles__alert {
+  background: #fef2f2; color: #dc2626;
+  border-radius: 10px; padding: 10px 14px; margin-bottom: 16px;
+}
+.btn {
+  height: 40px; padding: 0 18px; border: none; border-radius: 10px;
+  background: var(--color-primary, #4338ca); color: #fff;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btn:hover { background: #3730a3; }
+.btn:disabled { background: #94a3b8; cursor: not-allowed; }
+.btn--ghost { background: transparent; color: var(--color-ink, #0f172a); border: 1px solid #cbd5e1; }
+.btn--ghost:hover { background: var(--color-surface, #f1f5f9); }

@@ -1,0 +1,23 @@
+<table class="tbl">
+  <thead>
+    <tr>
+      <th class="tbl__th">Nombre</th>
+      <th class="tbl__th">Creado</th>
+      <th class="tbl__th tbl__th--actions">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (role of roles(); track role.id) {
+      <tr class="tbl__row">
+        <td class="tbl__td">{{ role.name }}</td>
+        <td class="tbl__td">{{ role.createdAt  }}</td>
+        <td class="tbl__td tbl__td--actions">
+          <button class="btn-sm" type="button" (click)="edit.emit(role)">Editar</button>
+          <button class="btn-sm btn-sm--danger" type="button" (click)="remove.emit(role)">Eliminar</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td class="tbl__td tbl__empty" colspan="3">No hay roles registrados.</td></tr>
+    }
+  </tbody>
+</table>

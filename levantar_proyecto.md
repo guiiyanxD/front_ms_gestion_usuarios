@@ -1,0 +1,1 @@
+npx nx serve shell --proxy-config apps/shell/proxy.conf.json

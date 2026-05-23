@@ -27,7 +27,7 @@ export class NavbarComponent {
   private readonly allItems: MenuItem[] = [
     { label: 'Perfil', path: '/profile' },
     // Próximamente:
-    // { label: 'Roles', path: '/roles', roles: ['superadmin', 'admin'] },
+    { label: 'Roles', path: '/roles', roles: ['superadmin'] },
     // { label: 'Usuarios', path: '/users', roles: ['superadmin', 'admin'] },
   ];
 

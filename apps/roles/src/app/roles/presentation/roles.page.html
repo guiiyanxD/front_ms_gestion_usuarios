@@ -1,0 +1,29 @@
+<main class="roles">
+  <header class="roles__head">
+    <h1 class="roles__title">Gestión de Roles</h1>
+    @if (!showForm()) {
+      <button class="btn" type="button" (click)="onNew()">Nuevo rol</button>
+    }
+  </header>
+
+  @if (status() === 'error') {
+    <p class="roles__alert" role="alert">{{ error() }}</p>
+  }
+
+  @if (showForm()) {
+    <app-role-form
+      [editing]="editing()"
+      [saving]="isSaving()"
+      (submitted)="onSubmit($event)"
+      (cancelled)="onCancel()"
+    />
+  } @else if (status() === 'loading') {
+    <p class="roles__msg">Cargando roles…</p>
+  } @else {
+    <app-role-table
+      [roles]="roles()"
+      (edit)="onEdit($event)"
+      (remove)="onDelete($event)"
+    />
+  }
+</main>

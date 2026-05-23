@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "paths": {
       "@gestion-workspace/ui": ["./libs/shared/ui/src/index.ts"],
-      "profile/Routes": ["./apps/profile/src/app/remote-entry/entry.routes.ts"]
+      "profile/Routes": ["./apps/profile/src/app/remote-entry/entry.routes.ts"],
+      "roles/Routes": ["./apps/roles/src/app/remote-entry/entry.routes.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
