@@ -1,0 +1,30 @@
+<main class="users">
+  <header class="users__head">
+    <h1 class="users__title">Gestión de Usuarios</h1>
+    @if (!showForm()) {
+      <button class="btn" type="button" (click)="onNew()">Nuevo usuario</button>
+    }
+  </header>
+
+  @if (status() === 'error') {
+    <p class="users__alert" role="alert">{{ error() }}</p>
+  }
+
+  @if (showForm()) {
+    <app-user-form
+      [editing]="editing()"
+      [roleOptions]="roleOptions()"
+      [saving]="isSaving()"
+      (submitted)="onSubmit($event)"
+      (cancelled)="onCancel()"
+    />
+  } @else if (status() === 'loading') {
+    <p class="users__msg">Cargando usuarios…</p>
+  } @else {
+    <app-user-table
+      [users]="users()"
+      (edit)="onEdit($event)"
+      (remove)="onDelete($event)"
+    />
+  }
+</main>

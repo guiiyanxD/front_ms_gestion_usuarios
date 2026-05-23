@@ -5,7 +5,8 @@ import { guestGuard } from './core/auth/guards/guest.guard';
 export const appRoutes: Routes = [
   {
     path: 'users',
-    loadChildren: () => import('users/Routes').then((m) => m!.remoteRoutes),
+    canActivate: [authGuard],
+    loadChildren: () => import('users/Routes').then((m) => m.remoteRoutes),
   },
   {
     path: 'roles',

@@ -1,0 +1,75 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <h2 class="form__title">{{ editing() ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+  <div class="form__grid">
+    <label class="field">
+      <span class="field__label">Nombre</span>
+      <input class="field__input" type="text" formControlName="firstName" />
+      @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+        <span class="field__error" role="alert">Obligatorio.</span>
+      }
+    </label>
+
+    <label class="field">
+      <span class="field__label">Apellido</span>
+      <input class="field__input" type="text" formControlName="lastName" />
+      @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+        <span class="field__error" role="alert">Obligatorio.</span>
+      }
+    </label>
+
+    <label class="field">
+      <span class="field__label">DNI</span>
+      <input class="field__input" type="text" formControlName="dni" />
+      @if (form.controls.dni.touched && form.controls.dni.invalid) {
+        <span class="field__error" role="alert">Obligatorio.</span>
+      }
+    </label>
+
+    <label class="field">
+      <span class="field__label">Email</span>
+      <input class="field__input" type="email" formControlName="email" />
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <span class="field__error" role="alert">Email válido obligatorio.</span>
+      }
+    </label>
+
+    <label class="field">
+      <span class="field__label">Usuario</span>
+      <input class="field__input" type="text" formControlName="username" autocomplete="off" />
+      @if (form.controls.username.touched && form.controls.username.invalid) {
+        <span class="field__error" role="alert">Mínimo 3 caracteres.</span>
+      }
+    </label>
+
+    <label class="field">
+      <span class="field__label">
+        Contraseña {{ editing() ? '(dejar vacío para no cambiar)' : '' }}
+      </span>
+      <input class="field__input" type="password" formControlName="password" autocomplete="new-password" />
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <span class="field__error" role="alert">Mínimo 6 caracteres.</span>
+      }
+    </label>
+
+    <label class="field field--full">
+      <span class="field__label">Rol</span>
+      <select class="field__input" formControlName="roleId">
+        <option value="" disabled>Selecciona un rol</option>
+        @for (role of roleOptions(); track role.id) {
+          <option [value]="role.id">{{ role.name }}</option>
+        }
+      </select>
+      @if (form.controls.roleId.touched && form.controls.roleId.invalid) {
+        <span class="field__error" role="alert">Selecciona un rol.</span>
+      }
+    </label>
+  </div>
+
+  <div class="form__actions">
+    <button class="btn btn--ghost" type="button" (click)="cancelled.emit()">Cancelar</button>
+    <button class="btn" type="submit" [disabled]="saving()">
+      {{ saving() ? 'Guardando…' : 'Guardar' }}
+    </button>
+  </div>
+</form>

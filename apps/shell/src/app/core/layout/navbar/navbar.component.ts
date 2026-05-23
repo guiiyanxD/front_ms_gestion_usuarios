@@ -22,13 +22,10 @@ export class NavbarComponent {
   readonly user = this.store.currentUser;
   readonly roles = this.store.roles;
 
-  // Catálogo de menú. Aquí iremos añadiendo los MFEs (Roles, Usuarios, etc.).
-  // Cada item declara qué roles pueden verlo; el filtrado es el menú dinámico por rol.
   private readonly allItems: MenuItem[] = [
     { label: 'Perfil', path: '/profile' },
-    // Próximamente:
-    { label: 'Roles', path: '/roles', roles: ['superadmin'] },
-    // { label: 'Usuarios', path: '/users', roles: ['superadmin', 'admin'] },
+    { label: 'Roles', path: '/roles', roles: ['superadmin', 'admin'] },
+    { label: 'Usuarios', path: '/users', roles: ['superadmin', 'admin'] },
   ];
 
   // Menú visible: filtra los items según los roles del usuario actual.
