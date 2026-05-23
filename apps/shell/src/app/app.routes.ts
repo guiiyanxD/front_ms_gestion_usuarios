@@ -4,6 +4,14 @@ import { authGuard } from './core/auth/guards/auth.guard';
 
 export const appRoutes: Routes = [
   {
+    path: 'profile',
+    loadChildren: () => import('profile/Routes').then((m) => m!.remoteRoutes),
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('profile/Routes').then((m) => m!.remoteRoutes),
+  },
+  {
     path: '',
     component: NxWelcome,
   },
