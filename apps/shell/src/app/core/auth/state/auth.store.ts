@@ -36,7 +36,7 @@ export class AuthStore {
         this.storage.save(session);
         this._session.set(session);
         this._status.set('idle');
-        this.router.navigate(['/']);
+        this.router.navigate(['/profile']);
       },
       error: () => {
         this._status.set('error');

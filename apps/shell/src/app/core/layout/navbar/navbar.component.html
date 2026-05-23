@@ -1,0 +1,29 @@
+<nav class="navbar" aria-label="Navegación principal">
+  <div class="navbar__brand">
+    <span class="navbar__logo" aria-hidden="true">G</span>
+    <span class="navbar__title">Gestión</span>
+  </div>
+
+  <ul class="navbar__menu">
+    @for (item of visibleItems(); track item.path) {
+      <li>
+        <a
+          class="navbar__link"
+          [routerLink]="item.path"
+          routerLinkActive="navbar__link--active"
+        >
+          {{ item.label }}
+        </a>
+      </li>
+    }
+  </ul>
+
+  <div class="navbar__user">
+    @if (user(); as u) {
+      <span class="navbar__username">{{ u.username }}</span>
+    }
+    <button class="navbar__logout" type="button" (click)="onLogout()">
+      Cerrar sesión
+    </button>
+  </div>
+</nav>

@@ -1,18 +1,17 @@
-// core/auth/data/mappers/session.mapper.ts
 import { LoginResponseDto } from '../dto/login-response.dto';
 import { Session } from '../../domain/models/session.model';
 
 export function toSession(dto: LoginResponseDto): Session {
   return {
-    accessToken: dto.access_token,
-    refreshToken: dto.refresh_token,
-    expiresAt: Date.now() + dto.expires_in * 1000,
+    accessToken: dto.accessToken,
+    refreshToken: dto.refreshToken,
+    expiresAt: 0, // tu API no envía expiración; lo derivaremos del JWT más adelante
     user: {
       id: dto.user.id,
       username: dto.user.username,
-      fullName: dto.user.full_name,
-      roles: dto.user.roles ?? [],
-      permissions: dto.user.permissions ?? [],
+      fullName: dto.user.username,        // no hay fullName; usamos username por ahora
+      roles: [dto.user.role],             // un solo rol → lo metemos en el array
+      permissions: [],                    // tu API no envía permisos aún
     },
   };
 }

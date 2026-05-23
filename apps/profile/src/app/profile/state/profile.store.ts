@@ -4,7 +4,7 @@ import { Profile } from '../domain/models/profile.model';
 
 type Status = 'idle' | 'loading' | 'error';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ProfileStore {
   private readonly getProfileUseCase = inject(GetProfileUseCase);
 

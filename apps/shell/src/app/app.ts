@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
-//import { RouterModule } from '@angular/router';
-//import { NxWelcome } from './nx-welcome';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './core/layout/navbar/navbar.component';
+import { AuthStore } from './core/auth/state/auth.store';
 
 @Component({
-  imports: [RouterOutlet],
-  standalone: true,
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, NavbarComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  protected title = 'Gestion de Usuarios';
+  private readonly store = inject(AuthStore);
+  readonly isAuthenticated = this.store.isAuthenticated;
 }

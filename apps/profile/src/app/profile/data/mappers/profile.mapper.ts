@@ -5,9 +5,9 @@ export function toProfile(dto: ProfileDto): Profile {
   return {
     id: dto.id,
     username: dto.username,
-    fullName: dto.full_name,
-    email: dto.email,
-    roles: dto.roles ?? [],
-    permissions: dto.permissions ?? [],
+    fullName: dto.username,     // no hay fullName; usamos username
+    email: '—',                 // tu API no envía email aún
+    roles: [dto.role],          // un solo rol → al array
+    permissions: [],
   };
 }
