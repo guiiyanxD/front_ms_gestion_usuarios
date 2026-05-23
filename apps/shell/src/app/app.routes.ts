@@ -9,10 +9,21 @@ export const appRoutes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./features/login/login.page').then((m) => m.LoginPage),
+    loadComponent: () =>
+      import('./features/login/login.page').then((m) => m.LoginPage),
   },
-  // MFEs remotos protegidos — se cargarán perezosamente tras login válido:
-  // { path: 'users', canActivate: [authGuard], loadChildren: () => loadRemote(...) },
-  { path: '', canActivate: [authGuard], pathMatch: 'full', redirectTo: 'login' },
+
+  // Área protegida: aquí colgarán los MFEs remotos tras login válido.
+  // El guard vive en estas rutas, NO en la redirección.
+  // {
+  //   path: 'users',
+  //   canActivate: [authGuard],
+  //   loadChildren: () => loadRemote(...),
+  // },
+
+  // La raíz solo redirige. Sin canActivate.
+  //{ path: '', pathMatch: 'full', redirectTo: 'login' },
+
+  // Cualquier ruta desconocida vuelve al login.
   { path: '**', redirectTo: 'login' },
 ];
