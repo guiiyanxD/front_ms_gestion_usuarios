@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  shell:
+    build: { context: ., dockerfile: apps/shell/Dockerfile }
+    ports: ["4200:80"]
+    container_name: mfe-shell
+  profile:
+    build: { context: ., dockerfile: apps/profile/Dockerfile }
+    ports: ["4201:80"]
+    container_name: mfe-profile
+  roles:
+    build: { context: ., dockerfile: apps/roles/Dockerfile }
+    ports: ["4202:80"]
+    container_name: mfe-roles
+  users:
+    build: { context: ., dockerfile: apps/users/Dockerfile }
+    ports: ["4203:80"]
+    container_name: mfe-users
