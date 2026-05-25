@@ -1,0 +1,5 @@
+{
+  "profile": "http://localhost:4201",
+  "roles": "http://localhost:4202",
+  "users": "http://localhost:4203"
+}

@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   shell:
-    image: willdev18/mfe_shell_activos-fijos_sw2:localhost-properly 
+    image: willdev18/mfe_shell_activos-fijos_sw2:dynamic-fed
     ports:
       - "4200:80"
     container_name: mfe-shell

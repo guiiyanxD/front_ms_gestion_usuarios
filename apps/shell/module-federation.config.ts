@@ -13,8 +13,10 @@ const config: ModuleFederationConfig = {
    *
    * declare module 'my-external-remote';
    *
+   *
+   * remotes: ['profile', 'roles', 'users'], /
    */
-  remotes: ['profile', 'roles', 'users'],
+  remotes:[],
 };
 
 /**
