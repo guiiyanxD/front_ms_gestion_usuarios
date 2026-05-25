@@ -1,13 +1,24 @@
 version: "3.9"
 services:
   shell:
-    build:
-      context: .
-      dockerfile: apps/shell/Dockerfile
-    container_name: gestion-shell
+    image: willdev18/mfe_shell_activos-fijos_sw2:v1 
     ports:
       - "4200:80"
-    environment:
-      - API_GATEWAY_URL=http://api-gateway:8080/api
-    # depends_on / networks: enlaza aquí el API Gateway y los MFEs remotos
-    # cuando los generemos, manteniendo el stack integrado.
+    container_name: mfe-shell
+
+  profile:
+    image: willdev18/mfe_profile_activos-fijos_sw2:cors-updated  
+      - "4201:80"
+    container_name: mfe-profile
+
+  roles:
+    image: willdev18/mfe_roles_activos-fijos_sw2:cors-updated
+    ports:
+      - "4202:80"
+    container_name: mfe-roles
+
+  users:
+    image: willdev18/mfe_users_activos-fijos_sw2:cors-updated  
+    ports:
+      - "4203:80"
+    container_name: mfe-users
