@@ -1,0 +1,76 @@
+<main class="detail">
+  <button class="btn btn--ghost detail__back" type="button" (click)="onBack()">
+    ← Volver al listado
+  </button>
+
+  @if (status() === 'error') {
+    <p class="detail__alert" role="alert">{{ error() }}</p>
+  } @else if (status() === 'loading' || !activo()) {
+    <p class="detail__msg">Cargando activo…</p>
+  } @else {
+    @let a = activo()!;
+    <article class="detail__card">
+      <div class="detail__image-wrap">
+        @if (a.imagenUrl) {
+          <img class="detail__image" [src]="a.imagenUrl" [alt]="a.nombre" />
+        } @else {
+          <div class="detail__image-placeholder" aria-label="Sin imagen">Sin imagen</div>
+        }
+      </div>
+
+      <div class="detail__info">
+        <header class="detail__header">
+          <h1 class="detail__name">{{ a.nombre }}</h1>
+          <span class="chip chip--{{ a.estado }}">{{ a.estado }}</span>
+        </header>
+
+        <p class="detail__desc">{{ a.descripcion }}</p>
+
+        <dl class="detail__dl">
+          <div class="detail__row">
+            <dt class="detail__dt">Código</dt>
+            <dd class="detail__dd">{{ a.codigo }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Categoría</dt>
+            <dd class="detail__dd">{{ a.categoria }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Ubicación</dt>
+            <dd class="detail__dd">{{ a.ubicacion }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Marca</dt>
+            <dd class="detail__dd">{{ a.marca }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Modelo</dt>
+            <dd class="detail__dd">{{ a.modelo }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Número de serie</dt>
+            <dd class="detail__dd">{{ a.numeroSerie }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Valor de adquisición</dt>
+            <dd class="detail__dd">{{ a.valorAdquisicion | number:'1.2-2' }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Fecha de adquisición</dt>
+            <dd class="detail__dd">{{ a.fechaAdquisicion }}</dd>
+          </div>
+          @if (a.tags.length > 0) {
+            <div class="detail__row detail__row--tags">
+              <dt class="detail__dt">Etiquetas</dt>
+              <dd class="detail__dd detail__tags">
+                @for (tag of a.tags; track tag) {
+                  <span class="tag">{{ tag }}</span>
+                }
+              </dd>
+            </div>
+          }
+        </dl>
+      </div>
+    </article>
+  }
+</main>
