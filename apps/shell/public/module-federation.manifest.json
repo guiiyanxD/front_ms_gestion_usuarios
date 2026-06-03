@@ -1,5 +1,6 @@
 {
   "profile": "https://profile-mfe.onrender.com",
   "roles": "https://front-ms-gestion-usuarios.onrender.com",
-  "users": "https://mfe-users.onrender.com"
-}
+  "users": "https://mfe-users.onrender.com",
+  "activos-fijos": "https://ms-ia-busqueda.duckdns.org/"
+} 

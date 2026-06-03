@@ -1,0 +1,32 @@
+<table class="tbl">
+  <thead>
+    <tr>
+      <th class="tbl__th">Código</th>
+      <th class="tbl__th">Nombre</th>
+      <th class="tbl__th">Categoría</th>
+      <th class="tbl__th">Ubicación</th>
+      <th class="tbl__th">Marca</th>
+      <th class="tbl__th">Estado</th>
+      <th class="tbl__th tbl__th--actions">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (activo of activos(); track activo.id) {
+      <tr class="tbl__row">
+        <td class="tbl__td tbl__td--code">{{ activo.codigo }}</td>
+        <td class="tbl__td">{{ activo.nombre }}</td>
+        <td class="tbl__td">{{ activo.categoria }}</td>
+        <td class="tbl__td">{{ activo.ubicacion }}</td>
+        <td class="tbl__td">{{ activo.marca }}</td>
+        <td class="tbl__td">
+          <span class="chip chip--{{ activo.estado }}">{{ activo.estado }}</span>
+        </td>
+        <td class="tbl__td tbl__td--actions">
+          <button class="btn-sm" type="button" (click)="view.emit(activo)">Ver detalle</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td class="tbl__td tbl__empty" colspan="7">No hay activos registrados.</td></tr>
+    }
+  </tbody>
+</table>

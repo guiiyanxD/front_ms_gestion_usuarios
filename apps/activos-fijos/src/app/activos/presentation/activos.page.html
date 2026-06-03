@@ -1,0 +1,27 @@
+<main class="activos">
+  <header class="activos__head">
+    <h1 class="activos__title">Gestión de Activos Fijos</h1>
+    @if (!showForm()) {
+      <button class="btn" type="button" (click)="onNew()">Nuevo activo</button>
+    }
+  </header>
+
+  @if (status() === 'error') {
+    <p class="activos__alert" role="alert">{{ error() }}</p>
+  }
+
+  @if (showForm()) {
+    <app-activo-form
+      [saving]="isSaving()"
+      (submitted)="onSubmit($event)"
+      (cancelled)="onCancel()"
+    />
+  } @else if (status() === 'loading') {
+    <p class="activos__msg">Cargando activos…</p>
+  } @else {
+    <app-activo-table
+      [activos]="activos()"
+      (view)="onView($event)"
+    />
+  }
+</main>
