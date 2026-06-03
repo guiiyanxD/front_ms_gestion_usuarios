@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiGatewayUrl: 'https://reverse-proxy-for-gestion-workspace.onrender.com',
+  apiGatewayUrl: 'https://reverse-proxy-for-gestion-workspace.onrender.com/api',
 };
