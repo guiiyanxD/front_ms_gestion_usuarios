@@ -26,7 +26,7 @@ const CREATE_USER = gql`
     $firstName: String!
     $lastName: String!
     $password: String!
-    $roleId: String!
+    $roleId: ID!
   ) {
     createUser(
       email: $email
@@ -47,7 +47,7 @@ const CREATE_USER = gql`
 `;
 
 const UPDATE_USER = gql`
-  mutation UpdateUser($id: String!, $firstName: String!, $lastName: String!) {
+  mutation UpdateUser($id: ID!, $firstName: String!, $lastName: String!) {
     updateUser(id: $id, firstName: $firstName, lastName: $lastName) {
       id
       firstName

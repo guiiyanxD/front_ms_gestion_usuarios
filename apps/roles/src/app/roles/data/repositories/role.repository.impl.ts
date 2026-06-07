@@ -29,7 +29,7 @@ const CREATE_ROLE = gql`
 `;
 
 const DELETE_ROLE = gql`
-  mutation DeleteRole($id: String!) {
+  mutation DeleteRole($id: ID!) {
     deleteRole(id: $id)
   }
 `;
