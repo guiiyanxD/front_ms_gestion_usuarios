@@ -1,27 +1,38 @@
-// core/auth/data/repositories/auth.repository.impl.ts
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Apollo, gql } from 'apollo-angular';
+import { Observable, map, of } from 'rxjs';
 import { AuthRepository } from '../../domain/repositories/auth.repository';
 import { Credentials } from '../../domain/models/credentials.model';
 import { Session } from '../../domain/models/session.model';
 import { LoginResponseDto } from '../dto/login-response.dto';
 import { toSession } from '../mappers/session.mapper';
-import { API_GATEWAY_URL } from '../../auth.providers';
+
+const LOGIN_MUTATION = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      id
+      token
+      firstName
+      lastName
+      email
+    }
+  }
+`;
 
 @Injectable()
 export class AuthRepositoryImpl extends AuthRepository {
-  private readonly http = inject(HttpClient);
-  private readonly gateway = inject(API_GATEWAY_URL);
+  private readonly apollo = inject(Apollo);
 
-  // Única clase que conoce las rutas del Gateway. Nunca un microservicio directo.
   login(credentials: Credentials): Observable<Session> {
-    return this.http
-      .post<LoginResponseDto>(`${this.gateway}/auth/login`, credentials)
-      .pipe(map(toSession));
+    return this.apollo
+      .mutate<LoginResponseDto>({
+        mutation: LOGIN_MUTATION,
+        variables: { email: credentials.email, password: credentials.password },
+      })
+      .pipe(map(result => toSession(result.data!)));
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`${this.gateway}/auth/logout`, {});
+    return of(undefined);
   }
 }

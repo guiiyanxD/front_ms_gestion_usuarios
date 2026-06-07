@@ -1,9 +1,9 @@
 export interface LoginResponseDto {
-  accessToken: string;
-  refreshToken: string;
-  user: {
+  login: {
     id: string;
-    username: string;
-    role: string;
+    token: string;
+    firstName: string;
+    lastName: string;
+    email: string;
   };
 }

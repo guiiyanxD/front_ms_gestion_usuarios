@@ -1,17 +1,28 @@
 import { LoginResponseDto } from '../dto/login-response.dto';
 import { Session } from '../../domain/models/session.model';
 
+interface JwtPayload {
+  sub: string;
+  role: string;
+  exp: number;
+}
+
+function decodeJwt(token: string): JwtPayload {
+  return JSON.parse(atob(token.split('.')[1]));
+}
+
 export function toSession(dto: LoginResponseDto): Session {
+  const { id, token, firstName, lastName, email } = dto.login;
+  const { role, exp } = decodeJwt(token);
   return {
-    accessToken: dto.accessToken,
-    refreshToken: dto.refreshToken,
-    expiresAt: 0, // tu API no envía expiración; lo derivaremos del JWT más adelante
+    accessToken: token,
+    expiresAt: exp * 1000,
     user: {
-      id: dto.user.id,
-      username: dto.user.username,
-      fullName: dto.user.username,        // no hay fullName; usamos username por ahora
-      roles: [dto.user.role],             // un solo rol → lo metemos en el array
-      permissions: [],                    // tu API no envía permisos aún
+      id,
+      username: email,
+      fullName: `${firstName} ${lastName}`,
+      roles: [role],
+      permissions: [],
     },
   };
 }
