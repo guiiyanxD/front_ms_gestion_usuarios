@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  graphqlUrl: 'http://usermanagement-prod.eba-pdsbyyjq.us-east-1.elasticbeanstalk.com/graphql',
+  graphqlUrl: 'https://reverse-proxy-for-gestion-workspace.onrender.com/graphql',
 };
