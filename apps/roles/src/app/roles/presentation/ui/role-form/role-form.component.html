@@ -1,11 +1,19 @@
 <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-  <h2 class="form__title">{{ editing() ? 'Editar rol' : 'Nuevo rol' }}</h2>
+  <h2 class="form__title">Nuevo rol</h2>
 
   <label class="field">
     <span class="field__label">Nombre del rol</span>
     <input class="field__input" type="text" formControlName="name" autocomplete="off" />
     @if (form.controls.name.touched && form.controls.name.invalid) {
       <span class="field__error" role="alert">El nombre es obligatorio (mínimo 3 caracteres).</span>
+    }
+  </label>
+
+  <label class="field">
+    <span class="field__label">Descripción</span>
+    <input class="field__input" type="text" formControlName="description" autocomplete="off" />
+    @if (form.controls.description.touched && form.controls.description.invalid) {
+      <span class="field__error" role="alert">La descripción es obligatoria.</span>
     }
   </label>
 
