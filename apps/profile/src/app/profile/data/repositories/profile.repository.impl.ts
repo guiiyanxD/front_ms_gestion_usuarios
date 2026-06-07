@@ -7,7 +7,7 @@ import { ProfileDto } from '../dto/profile.dto';
 import { toProfile } from '../mappers/profile.mapper';
 
 const GET_USER_BY_ID = gql`
-  query GetUserById($id: String!) {
+  query GetUserById($id: ID!) {
     userById(id: $id) {
       id
       firstName
