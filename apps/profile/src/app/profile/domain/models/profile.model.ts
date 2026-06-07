@@ -5,4 +5,5 @@ export interface Profile {
   readonly email: string;
   readonly roles: ReadonlyArray<string>;
   readonly permissions: ReadonlyArray<string>;
+  readonly enabled: boolean;
 }

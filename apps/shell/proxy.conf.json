@@ -1,6 +1,6 @@
 {
   "/graphql": {
-    "target": "http://usermanagement-prod.eba-pdsbyyjq.us-east-1.elasticbeanstalk.com/graphql",
+    "target": "http://usermanagement-prod.eba-pdsbyyjq.us-east-1.elasticbeanstalk.com",
     "secure": false,
     "changeOrigin": true
   }

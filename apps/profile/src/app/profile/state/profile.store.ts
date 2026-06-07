@@ -4,6 +4,15 @@ import { Profile } from '../domain/models/profile.model';
 
 type Status = 'idle' | 'loading' | 'error';
 
+// Lee el id del usuario autenticado desde la sesión que el shell persiste.
+// No se importa AuthStore directamente porque en Module Federation cada bundle
+// obtendría una instancia distinta del servicio, rompiendo el singleton del shell.
+function currentUserId(): string | null {
+  const raw = sessionStorage.getItem('gestion.session');
+  if (!raw) return null;
+  return (JSON.parse(raw) as { user: { id: string } }).user?.id ?? null;
+}
+
 @Injectable()
 export class ProfileStore {
   private readonly getProfileUseCase = inject(GetProfileUseCase);
@@ -18,9 +27,16 @@ export class ProfileStore {
   readonly isLoading = computed(() => this._status() === 'loading');
 
   load(): void {
+    const id = currentUserId();
+    if (!id) {
+      this._status.set('error');
+      this._error.set('Sesión no encontrada.');
+      return;
+    }
+
     this._status.set('loading');
     this._error.set(null);
-    this.getProfileUseCase.execute().subscribe({
+    this.getProfileUseCase.execute(id).subscribe({
       next: (profile) => {
         this._profile.set(profile);
         this._status.set('idle');

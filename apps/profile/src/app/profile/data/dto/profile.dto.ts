@@ -1,5 +1,11 @@
 export interface ProfileDto {
   id: string;
-  username: string;
-  role: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: {
+    id: string;
+    name: string;
+  };
+  enabled: boolean;
 }

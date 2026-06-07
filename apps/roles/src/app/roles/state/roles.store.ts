@@ -1,7 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ListRolesUseCase } from '../domain/use-cases/list-roles.use-case';
 import { CreateRoleUseCase } from '../domain/use-cases/create-role.use-case';
-import { UpdateRoleUseCase } from '../domain/use-cases/update-role.use-case';
 import { DeleteRoleUseCase } from '../domain/use-cases/delete-role.use-case';
 import { Role, RoleInput } from '../domain/models/role.model';
 
@@ -11,7 +10,6 @@ type Status = 'idle' | 'loading' | 'saving' | 'error';
 export class RolesStore {
   private readonly listUC = inject(ListRolesUseCase);
   private readonly createUC = inject(CreateRoleUseCase);
-  private readonly updateUC = inject(UpdateRoleUseCase);
   private readonly deleteUC = inject(DeleteRoleUseCase);
 
   private readonly _roles = signal<Role[]>([]);
@@ -38,14 +36,6 @@ export class RolesStore {
     this.createUC.execute(input).subscribe({
       next: () => this.load(),
       error: () => { this._status.set('error'); this._error.set('No se pudo crear el rol.'); },
-    });
-  }
-
-  update(id: string, input: RoleInput): void {
-    this._status.set('saving');
-    this.updateUC.execute(id, input).subscribe({
-      next: () => this.load(),
-      error: () => { this._status.set('error'); this._error.set('No se pudo actualizar el rol.'); },
     });
   }
 

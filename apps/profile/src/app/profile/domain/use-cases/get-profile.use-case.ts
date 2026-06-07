@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 export class GetProfileUseCase {
   constructor(private readonly repo: ProfileRepository) {}
 
-  execute(): Observable<Profile> {
-    return this.repo.getProfile();
+  execute(id: string): Observable<Profile> {
+    return this.repo.getProfile(id);
   }
 }

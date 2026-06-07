@@ -10,6 +10,5 @@ import { Role } from '../../../domain/models/role.model';
 })
 export class RoleTableComponent {
   readonly roles = input.required<Role[]>();
-  readonly edit = output<Role>();
   readonly remove = output<Role>();
 }

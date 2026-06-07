@@ -12,7 +12,6 @@
 
   @if (showForm()) {
     <app-role-form
-      [editing]="editing()"
       [saving]="isSaving()"
       (submitted)="onSubmit($event)"
       (cancelled)="onCancel()"
@@ -22,7 +21,6 @@
   } @else {
     <app-role-table
       [roles]="roles()"
-      (edit)="onEdit($event)"
       (remove)="onDelete($event)"
     />
   }

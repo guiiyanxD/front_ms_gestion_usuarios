@@ -1,36 +1,64 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Apollo, gql } from 'apollo-angular';
 import { Observable, map } from 'rxjs';
 import { RoleRepository } from '../../domain/repositories/role.repository';
 import { Role, RoleInput } from '../../domain/models/role.model';
-import { RoleDto, PaginatedRolesDto } from '../dto/role.dto';
+import { RoleDto } from '../dto/role.dto';
 import { toRole } from '../mappers/role.mapper';
-import { ROLES_GATEWAY_URL } from '../../roles.providers';
+
+const GET_ALL_ROLES = gql`
+  query GetAllRoles {
+    getAllRoles {
+      id
+      name
+      description
+      createdAt
+    }
+  }
+`;
+
+const CREATE_ROLE = gql`
+  mutation CreateRole($name: String!, $description: String!) {
+    createRole(name: $name, description: $description) {
+      id
+      name
+      description
+      createdAt
+    }
+  }
+`;
+
+const DELETE_ROLE = gql`
+  mutation DeleteRole($id: String!) {
+    deleteRole(id: $id)
+  }
+`;
 
 @Injectable()
 export class RoleRepositoryImpl extends RoleRepository {
-  private readonly http = inject(HttpClient);
-  private readonly gateway = inject(ROLES_GATEWAY_URL);
+  private readonly apollo = inject(Apollo);
 
   list(): Observable<Role[]> {
-    return this.http
-      .get<PaginatedRolesDto>(`${this.gateway}/roles`)
-      .pipe(map((res) => res.data.map(toRole)));
+    return this.apollo
+      .query<{ getAllRoles: RoleDto[] }>({
+        query: GET_ALL_ROLES,
+        fetchPolicy: 'network-only',
+      })
+      .pipe(map((result) => result.data.getAllRoles.map(toRole)));
   }
 
   create(input: RoleInput): Observable<Role> {
-    return this.http
-      .post<RoleDto>(`${this.gateway}/roles`, input)
-      .pipe(map(toRole));
-  }
-
-  update(id: string, input: RoleInput): Observable<Role> {
-    return this.http
-      .patch<RoleDto>(`${this.gateway}/roles/${id}`, input)
-      .pipe(map(toRole));
+    return this.apollo
+      .mutate<{ createRole: RoleDto }>({
+        mutation: CREATE_ROLE,
+        variables: { name: input.name, description: input.description },
+      })
+      .pipe(map((result) => toRole(result.data!.createRole)));
   }
 
   remove(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.gateway}/roles/${id}`);
+    return this.apollo
+      .mutate({ mutation: DELETE_ROLE, variables: { id } })
+      .pipe(map(() => undefined));
   }
 }
