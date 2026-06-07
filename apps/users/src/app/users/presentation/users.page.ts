@@ -26,7 +26,7 @@ export class UsersPage implements OnInit {
 
   ngOnInit(): void {
     this.store.load();
-    this.store.loadRoleOptions();   // pobla el selector de roles
+    this.store.loadRoleOptions();
   }
 
   onNew(): void { this.editing.set(null); this.showForm.set(true); }
@@ -42,11 +42,5 @@ export class UsersPage implements OnInit {
     }
     this.showForm.set(false);
     this.editing.set(null);
-  }
-
-  onDelete(user: User): void {
-    if (confirm(`¿Eliminar al usuario "${user.username}"?`)) {
-      this.store.remove(user.id);
-    }
   }
 }

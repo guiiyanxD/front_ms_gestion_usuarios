@@ -2,9 +2,9 @@
   <thead>
     <tr>
       <th class="tbl__th">Nombre</th>
-      <th class="tbl__th">Usuario</th>
       <th class="tbl__th">Email</th>
       <th class="tbl__th">Rol</th>
+      <th class="tbl__th">Estado</th>
       <th class="tbl__th tbl__th--actions">Acciones</th>
     </tr>
   </thead>
@@ -12,12 +12,15 @@
     @for (user of users(); track user.id) {
       <tr class="tbl__row">
         <td class="tbl__td">{{ user.firstName }} {{ user.lastName }}</td>
-        <td class="tbl__td">{{ user.username }}</td>
         <td class="tbl__td">{{ user.email }}</td>
         <td class="tbl__td"><span class="chip">{{ user.roleName }}</span></td>
+        <td class="tbl__td">
+          <span class="chip" [class.chip--disabled]="!user.enabled">
+            {{ user.enabled ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
         <td class="tbl__td tbl__td--actions">
           <button class="btn-sm" type="button" (click)="edit.emit(user)">Editar</button>
-          <button class="btn-sm btn-sm--danger" type="button" (click)="remove.emit(user)">Eliminar</button>
         </td>
       </tr>
     } @empty {

@@ -19,53 +19,40 @@ export class UserFormComponent {
 
   private readonly fb = new FormBuilder();
   readonly form = this.fb.nonNullable.group({
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
-    dni: ['', [Validators.required]],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    username: ['', [Validators.required, Validators.minLength(3)]],
-    password: ['', [Validators.minLength(6)]],   // validación condicional abajo
-    roleId: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    roleId: ['', Validators.required],
   });
-
-  readonly isEdit = false;
 
   constructor() {
     effect(() => {
       const user = this.editing();
       if (user) {
-        // Modo edición: rellena todo menos password, que queda vacío (opcional).
-        this.form.reset({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          dni: user.dni,
-          email: user.email,
-          username: user.username,
-          password: '',
-          roleId: user.roleId,
-        });
-        // En edición, password no es obligatorio.
+        this.form.reset({ firstName: user.firstName, lastName: user.lastName, email: '', password: '', roleId: '' });
+        this.form.controls.email.clearValidators();
         this.form.controls.password.clearValidators();
-        this.form.controls.password.addValidators(Validators.minLength(6));
+        this.form.controls.roleId.clearValidators();
       } else {
-        // Modo creación: password obligatorio.
-        this.form.reset({ firstName: '', lastName: '', dni: '', email: '', username: '', password: '', roleId: '' });
+        this.form.reset({ firstName: '', lastName: '', email: '', password: '', roleId: '' });
+        this.form.controls.email.setValidators([Validators.required, Validators.email]);
         this.form.controls.password.setValidators([Validators.required, Validators.minLength(6)]);
+        this.form.controls.roleId.setValidators([Validators.required]);
       }
+      this.form.controls.email.updateValueAndValidity();
       this.form.controls.password.updateValueAndValidity();
+      this.form.controls.roleId.updateValueAndValidity();
     });
   }
 
   onSubmit(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
-    const value = this.form.getRawValue();
+    const { firstName, lastName, email, password, roleId } = this.form.getRawValue();
     if (this.editing()) {
-      // En edición, si password está vacío, lo omitimos.
-      const payload: UpdateUserInput = { ...value };
-      if (!value.password) delete (payload as { password?: string }).password;
-      this.submitted.emit(payload);
+      this.submitted.emit({ firstName, lastName });
     } else {
-      this.submitted.emit(value as CreateUserInput);
+      this.submitted.emit({ firstName, lastName, email, password, roleId });
     }
   }
 }
