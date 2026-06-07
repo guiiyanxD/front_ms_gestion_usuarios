@@ -11,5 +11,4 @@ import { User } from '../../../domain/models/user.model';
 export class UserTableComponent {
   readonly users = input.required<User[]>();
   readonly edit = output<User>();
-  readonly remove = output<User>();
 }

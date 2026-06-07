@@ -1,7 +1,7 @@
-import { UserRepository } from '../repositories/user.repository';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 export class DeleteUserUseCase {
-  constructor(private readonly repo: UserRepository) {}
-  execute(id: string): Observable<void> { return this.repo.remove(id); }
+  execute(_id: string): Observable<void> {
+    return throwError(() => new Error('deleteUser is not supported by the API.'));
+  }
 }
