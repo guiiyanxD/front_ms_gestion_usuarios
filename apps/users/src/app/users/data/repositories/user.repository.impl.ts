@@ -80,7 +80,7 @@ export class UserRepositoryImpl extends UserRepository {
         query: GET_ALL_USERS,
         fetchPolicy: 'network-only',
       })
-      .pipe(map((result) => result.data.getAllUsers.map(toUser)));
+      .pipe(map((result) => result.data!.getAllUsers.map(toUser)));
   }
 
   create(input: CreateUserInput): Observable<User> {
@@ -113,6 +113,6 @@ export class UserRepositoryImpl extends UserRepository {
         query: GET_ALL_ROLES,
         fetchPolicy: 'cache-first',
       })
-      .pipe(map((result) => result.data.getAllRoles.map(toRoleOption)));
+      .pipe(map((result) => result.data!.getAllRoles.map(toRoleOption)));
   }
 }

@@ -44,7 +44,7 @@ export class RoleRepositoryImpl extends RoleRepository {
         query: GET_ALL_ROLES,
         fetchPolicy: 'network-only',
       })
-      .pipe(map((result) => result.data.getAllRoles.map(toRole)));
+      .pipe(map((result) => result.data!.getAllRoles.map(toRole)));
   }
 
   create(input: RoleInput): Observable<Role> {

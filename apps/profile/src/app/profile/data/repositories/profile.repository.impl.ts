@@ -32,6 +32,6 @@ export class ProfileRepositoryImpl extends ProfileRepository {
         query: GET_USER_BY_ID,
         variables: { id },
       })
-      .pipe(map((result) => toProfile(result.data.userById)));
+      .pipe(map((result) => toProfile(result.data!.userById)));
   }
 }
