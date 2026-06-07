@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  graphqlUrl: 'https://viralshopbo.com/graphiql',
+  graphqlUrl: 'https://viralshopbo.com/graphql',
 };
