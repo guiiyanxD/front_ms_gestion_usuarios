@@ -20,7 +20,7 @@ export class ActivoRepositoryImpl extends ActivoRepository {
       limit: filters.limit,
     };
     return this.http
-      .post<SearchActivoResponseDto>(`${this.gateway}/api/v1/search/text`, body)
+      .post<SearchActivoResponseDto>(`${this.gateway}/v1/search/text`, body)
       .pipe(map(toSearchResult));
   }
 
