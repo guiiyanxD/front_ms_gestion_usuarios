@@ -1,6 +1,5 @@
 import { EstadoActivo } from '../../domain/models/activo.model';
 
-// Refleja la forma real del API (snake_case, a diferencia del resto del proyecto).
 export interface ActivoDto {
   id: string;
   codigo: string;
@@ -18,14 +17,6 @@ export interface ActivoDto {
   tags: string[];
 }
 
-export interface PaginatedActivosDto {
-  data: ActivoDto[];
-  total: number;
-  page: number;
-  size: number;
-}
-
-// Body para POST /api/v1/assets (misma forma que el DTO de respuesta salvo `id`).
 export interface CreateActivoDto {
   codigo: string;
   nombre: string;
@@ -40,4 +31,31 @@ export interface CreateActivoDto {
   fecha_adquisicion: string;
   imagen_url: string;
   tags: string[];
+}
+
+export interface SearchActivoRequestDto {
+  query: string;
+  categoria: string;
+  ubicacion: string;
+  limit: number;
+}
+
+export interface SearchResultItemDto {
+  asset_id: string;
+  codigo: string;
+  nombre: string;
+  descripcion: string;
+  categoria: string;
+  ubicacion: string;
+  estado: string;
+  similarity_score: number;
+  imagen_url: string;
+}
+
+export interface SearchActivoResponseDto {
+  search_type: string;
+  query_interpreted: string;
+  total_results: number;
+  results: SearchResultItemDto[];
+  response_time_ms: number;
 }

@@ -1,5 +1,5 @@
-import { ActivoDto, CreateActivoDto } from '../dto/activo.dto';
-import { Activo, ActivoSummary, CreateActivoInput } from '../../domain/models/activo.model';
+import { ActivoDto, CreateActivoDto, SearchResultItemDto, SearchActivoResponseDto } from '../dto/activo.dto';
+import { Activo, ActivoSummary, CreateActivoInput, SearchActivoResult, EstadoActivo } from '../../domain/models/activo.model';
 
 export function toActivo(dto: ActivoDto): Activo {
   return {
@@ -20,15 +20,24 @@ export function toActivo(dto: ActivoDto): Activo {
   };
 }
 
-export function toActivoSummary(dto: ActivoDto): ActivoSummary {
+export function toActivoSummaryFromSearch(dto: SearchResultItemDto): ActivoSummary {
   return {
-    id: dto.id,
+    id: dto.asset_id,
     codigo: dto.codigo,
     nombre: dto.nombre,
+    descripcion: dto.descripcion,
     categoria: dto.categoria,
     ubicacion: dto.ubicacion,
-    estado: dto.estado,
-    marca: dto.marca,
+    estado: dto.estado as EstadoActivo,
+    imagenUrl: dto.imagen_url,
+  };
+}
+
+export function toSearchResult(dto: SearchActivoResponseDto): SearchActivoResult {
+  return {
+    items: dto.results.map(toActivoSummaryFromSearch),
+    total: dto.total_results,
+    queryInterpreted: dto.query_interpreted,
   };
 }
 

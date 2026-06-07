@@ -21,10 +21,24 @@ export interface ActivoSummary {
   readonly id: string;
   readonly codigo: string;
   readonly nombre: string;
+  readonly descripcion: string;
   readonly categoria: string;
   readonly ubicacion: string;
   readonly estado: EstadoActivo;
-  readonly marca: string;
+  readonly imagenUrl: string;
+}
+
+export interface SearchActivoFilters {
+  readonly query: string;
+  readonly categoria: string;
+  readonly ubicacion: string;
+  readonly limit: number;
+}
+
+export interface SearchActivoResult {
+  readonly items: ActivoSummary[];
+  readonly total: number;
+  readonly queryInterpreted: string;
 }
 
 export interface CreateActivoInput {

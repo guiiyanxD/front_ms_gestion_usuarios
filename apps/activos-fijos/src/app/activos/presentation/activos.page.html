@@ -16,12 +16,43 @@
       (submitted)="onSubmit($event)"
       (cancelled)="onCancel()"
     />
-  } @else if (status() === 'loading') {
-    <p class="activos__msg">Cargando activos…</p>
   } @else {
-    <app-activo-table
-      [activos]="activos()"
-      (view)="onView($event)"
-    />
+    <form class="activos__search" [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <input
+        class="field__input"
+        type="text"
+        formControlName="query"
+        placeholder="Buscar activos…"
+        aria-label="Texto de búsqueda"
+      />
+      <input
+        class="field__input"
+        type="text"
+        formControlName="categoria"
+        placeholder="Categoría"
+        aria-label="Categoría"
+      />
+      <input
+        class="field__input"
+        type="text"
+        formControlName="ubicacion"
+        placeholder="Ubicación"
+        aria-label="Ubicación"
+      />
+      <button class="btn" type="submit" [disabled]="status() === 'loading'">
+        {{ status() === 'loading' ? 'Buscando…' : 'Buscar' }}
+      </button>
+    </form>
+
+    @if (status() === 'loading') {
+      <p class="activos__msg">Buscando activos…</p>
+    } @else if (hasSearched()) {
+      <p class="activos__meta">
+        «{{ queryInterpreted() }}» — {{ total() }} resultado{{ total() !== 1 ? 's' : '' }}
+      </p>
+      <app-activo-table [activos]="activos()" (view)="onView($event)" />
+    } @else {
+      <p class="activos__msg">Ingresá un término de búsqueda para encontrar activos.</p>
+    }
   }
 </main>
