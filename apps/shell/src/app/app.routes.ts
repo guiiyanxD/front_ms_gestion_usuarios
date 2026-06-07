@@ -11,7 +11,7 @@ export const appRoutes: Routes = [
   {
     path: 'roles',
     canActivate: [authGuard],
-    loadChildren: () => import('roles/Routes').then((m) => m!.remoteRoutes),
+    loadChildren: () => import('roles/Routes').then((m) => m.remoteRoutes),
   },
   {
     path: 'profile',
