@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiGatewayUrl: 'https://<gateway-url>',
+  apiGatewayUrl: 'https://ms-ia-busqueda.duckdns.org/',
 };

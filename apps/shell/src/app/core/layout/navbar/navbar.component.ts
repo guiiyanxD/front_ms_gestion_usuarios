@@ -24,9 +24,9 @@ export class NavbarComponent {
 
   private readonly allItems: MenuItem[] = [
     { label: 'Perfil', path: '/profile' },
-    { label: 'Roles', path: '/roles', roles: ['superadmin', 'admin'] },
-    { label: 'Usuarios', path: '/users', roles: ['superadmin', 'admin'] },
-    { label: 'Activos Fijos', path: '/activos-fijos', roles: ['superadmin', 'admin'] },
+    { label: 'Roles', path: '/roles', roles: ['SUPERADMIN', 'GERENTE'] },
+    { label: 'Usuarios', path: '/users', roles: ['SUPERADMIN', 'GERENTE'] },
+    { label: 'Activos Fijos', path: '/activos-fijos', roles: ['SUPERADMIN', 'GERENTE', 'TECNICO','ASISTENTE', 'OPERADOR'] },
   ];
 
   // Menú visible: filtra los items según los roles del usuario actual.
