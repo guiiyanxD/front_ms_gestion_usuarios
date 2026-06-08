@@ -27,9 +27,9 @@ const GET_FIXED_ASSET_BY_ID = gql`
 const CREATE_FIXED_ASSET = gql`
   mutation CreateFixedAsset(
     $acquisitionDate: String!
-    $category: String!
+    $category: FixedAssetCategoryEnum!
     $name: String!
-    $status: String!
+    $status: FixedAssetStatusEnum!
     $description: String
     $imageUrl: String
     $location: String!
@@ -51,9 +51,9 @@ const CREATE_FIXED_ASSET = gql`
 const CREATE_FIXED_ASSET_WITH_USER = gql`
   mutation CreateFixedAssetWithUser(
     $acquisitionDate: String!
-    $category: String!
+    $category: FixedAssetCategoryEnum!
     $name: String!
-    $status: String!
+    $status: FixedAssetStatusEnum!
     $description: String
     $imageUrl: String
     $location: String!
@@ -78,12 +78,12 @@ const UPDATE_FIXED_ASSET = gql`
   mutation UpdateFixedAsset(
     $id: ID!
     $acquisitionDate: String
-    $category: String
+    $category: FixedAssetCategoryEnum
     $description: String
     $imageUrl: String
     $location: String
     $name: String
-    $status: String
+    $status: FixedAssetStatusEnum
   ) {
     updateFixedAsset(
       id: $id
