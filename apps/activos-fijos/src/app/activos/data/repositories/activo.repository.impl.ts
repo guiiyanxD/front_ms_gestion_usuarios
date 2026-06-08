@@ -180,7 +180,7 @@ export class ActivoRepositoryImpl extends ActivoRepository {
           .mutate<{ createFixedAsset: ActivoDto }>({ mutation: CREATE_FIXED_ASSET, variables: graphqlVars })
           .pipe(map((result) => toActivo(result.data!.createFixedAsset)));
 
-    const rest$ = this.http.post<CreateActivoRestResponseDto>(`${REST_BASE_URL}/assets`, restDto);
+    const rest$ = this.http.post<CreateActivoRestResponseDto>(`${REST_BASE_URL}/api/v1/assets`, restDto);
 
     return forkJoin([graphql$, rest$]).pipe(map(([activo]) => activo));
   }
