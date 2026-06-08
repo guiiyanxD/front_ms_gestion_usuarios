@@ -1,61 +1,36 @@
-import { EstadoActivo } from '../../domain/models/activo.model';
+import { ActivoCategory, ActivoStatus } from '../../domain/models/activo.model';
+
+export interface AssignedUserDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
 
 export interface ActivoDto {
   id: string;
-  codigo: string;
-  nombre: string;
-  descripcion: string;
-  categoria: string;
-  ubicacion: string;
-  estado: EstadoActivo;
-  marca: string;
-  modelo: string;
-  numero_serie: string;
-  valor_adquisicion: number;
-  fecha_adquisicion: string;
-  imagen_url: string;
-  tags: string[];
+  name: string;
+  description: string;
+  category: ActivoCategory;
+  location: string;
+  status: ActivoStatus;
+  imageUrl: string;
+  acquisitionDate: string;
+  user: AssignedUserDto | null;
 }
 
-export interface CreateActivoDto {
-  codigo: string;
-  nombre: string;
-  descripcion: string;
-  categoria: string;
-  ubicacion: string;
-  estado: EstadoActivo;
-  marca: string;
-  modelo: string;
-  numero_serie: string;
-  valor_adquisicion: number;
-  fecha_adquisicion: string;
-  imagen_url: string;
-  tags: string[];
+export interface ActivoSummaryDto {
+  id: string;
+  name: string;
+  category: ActivoCategory;
+  status: ActivoStatus;
+  location: string;
 }
 
-export interface SearchActivoRequestDto {
-  query: string;
-  categoria: string;
-  ubicacion: string;
-  limit: number;
-}
-
-export interface SearchResultItemDto {
-  asset_id: string;
-  codigo: string;
-  nombre: string;
-  descripcion: string;
-  categoria: string;
-  ubicacion: string;
-  estado: string;
-  similarity_score: number;
-  imagen_url: string;
-}
-
-export interface SearchActivoResponseDto {
-  search_type: string;
-  query_interpreted: string;
-  total_results: number;
-  results: SearchResultItemDto[];
-  response_time_ms: number;
+export interface PaginatedActivosDtoResult {
+  content: ActivoSummaryDto[];
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
 }

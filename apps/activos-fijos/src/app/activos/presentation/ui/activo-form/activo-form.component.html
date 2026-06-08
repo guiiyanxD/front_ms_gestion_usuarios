@@ -1,101 +1,64 @@
 <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-  <h2 class="form__title">Nuevo activo fijo</h2>
+  <h2 class="form__title">{{ editing() ? 'Editar activo' : 'Nuevo activo fijo' }}</h2>
 
   <div class="form__grid">
     <label class="field">
-      <span class="field__label">Código <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="codigo" />
-      @if (form.controls.codigo.touched && form.controls.codigo.invalid) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
-
-    <label class="field">
       <span class="field__label">Nombre <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="nombre" />
-      @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+      <input class="field__input" type="text" formControlName="name" aria-label="Nombre del activo" />
+      @if (form.controls.name.touched && form.controls.name.invalid) {
         <span class="field__error" role="alert">Obligatorio.</span>
       }
     </label>
 
     <label class="field">
       <span class="field__label">Categoría <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="categoria" />
-      @if (form.controls.categoria.touched && form.controls.categoria.invalid) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
-
-    <label class="field">
-      <span class="field__label">Ubicación <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="ubicacion" />
-      @if (form.controls.ubicacion.touched && form.controls.ubicacion.invalid) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
-
-    <label class="field">
-      <span class="field__label">Estado <span aria-hidden="true">*</span></span>
-      <select class="field__input" formControlName="estado" aria-label="Estado del activo">
-        @for (e of estados; track e) {
-          <option [value]="e">{{ e }}</option>
+      <select class="field__input" formControlName="category" aria-label="Categoría del activo">
+        @for (c of categories; track c) {
+          <option [value]="c">{{ categoryLabels[c] }}</option>
         }
       </select>
     </label>
 
     <label class="field">
-      <span class="field__label">Marca <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="marca" />
-      @if (form.controls.marca.touched && form.controls.marca.invalid) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
+      <span class="field__label">Estado <span aria-hidden="true">*</span></span>
+      <select class="field__input" formControlName="status" aria-label="Estado del activo">
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ statusLabels[s] }}</option>
+        }
+      </select>
     </label>
 
     <label class="field">
-      <span class="field__label">Modelo <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="modelo" />
-      @if (form.controls.modelo.touched && form.controls.modelo.invalid) {
+      <span class="field__label">Ubicación <span aria-hidden="true">*</span></span>
+      <input class="field__input" type="text" formControlName="location" aria-label="Ubicación del activo" />
+      @if (form.controls.location.touched && form.controls.location.invalid) {
         <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
-
-    <label class="field">
-      <span class="field__label">Número de serie <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="numeroSerie" />
-      @if (form.controls.numeroSerie.touched && form.controls.numeroSerie.invalid) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
-
-    <label class="field">
-      <span class="field__label">Valor de adquisición <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="number" min="0" step="0.01" formControlName="valorAdquisicion" />
-      @if (form.controls.valorAdquisicion.touched && form.controls.valorAdquisicion.invalid) {
-        <span class="field__error" role="alert">Valor válido obligatorio.</span>
       }
     </label>
 
     <label class="field">
       <span class="field__label">Fecha de adquisición <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="date" formControlName="fechaAdquisicion" />
-      @if (form.controls.fechaAdquisicion.touched && form.controls.fechaAdquisicion.invalid) {
+      <input class="field__input" type="date" formControlName="acquisitionDate" aria-label="Fecha de adquisición" />
+      @if (form.controls.acquisitionDate.touched && form.controls.acquisitionDate.invalid) {
         <span class="field__error" role="alert">Obligatorio.</span>
       }
     </label>
 
     <label class="field">
       <span class="field__label">URL de imagen</span>
-      <input class="field__input" type="url" formControlName="imagenUrl" placeholder="https://..." />
+      <input class="field__input" type="url" formControlName="imageUrl" placeholder="https://..." aria-label="URL de imagen" />
     </label>
 
-    <label class="field field--full">
-      <span class="field__label">Etiquetas (separadas por coma)</span>
-      <input class="field__input" type="text" formControlName="tagsRaw" placeholder="tag1, tag2, tag3" />
-    </label>
+    @if (!editing()) {
+      <label class="field">
+        <span class="field__label">ID de usuario (opcional)</span>
+        <input class="field__input" type="text" formControlName="userId" placeholder="UUID del usuario" aria-label="ID del usuario a asignar" />
+      </label>
+    }
 
     <label class="field field--full">
       <span class="field__label">Descripción</span>
-      <textarea class="field__input field__textarea" formControlName="descripcion" rows="3"></textarea>
+      <textarea class="field__input field__textarea" formControlName="description" rows="3" aria-label="Descripción"></textarea>
     </label>
   </div>
 

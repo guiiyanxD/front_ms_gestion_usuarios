@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
-import { SearchActivoFilters, SearchActivoResult } from '../models/activo.model';
+import { ListActivosFilters, PaginatedActivosResult } from '../models/activo.model';
 import { ActivoRepository } from '../repositories/activo.repository';
 
-export class SearchActivosUseCase {
+export class ListActivosUseCase {
   constructor(private readonly repo: ActivoRepository) {}
-  execute(filters: SearchActivoFilters): Observable<SearchActivoResult> {
-    return this.repo.search(filters);
+  execute(filters: ListActivosFilters): Observable<PaginatedActivosResult> {
+    return this.repo.list(filters);
   }
 }

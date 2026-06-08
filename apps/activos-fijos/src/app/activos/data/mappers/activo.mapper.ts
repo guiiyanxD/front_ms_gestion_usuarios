@@ -1,60 +1,37 @@
-import { ActivoDto, CreateActivoDto, SearchResultItemDto, SearchActivoResponseDto } from '../dto/activo.dto';
-import { Activo, ActivoSummary, CreateActivoInput, SearchActivoResult, EstadoActivo } from '../../domain/models/activo.model';
+import { ActivoDto, ActivoSummaryDto, PaginatedActivosDtoResult } from '../dto/activo.dto';
+import { Activo, ActivoSummary, PaginatedActivosResult } from '../../domain/models/activo.model';
 
 export function toActivo(dto: ActivoDto): Activo {
   return {
     id: dto.id,
-    codigo: dto.codigo,
-    nombre: dto.nombre,
-    descripcion: dto.descripcion,
-    categoria: dto.categoria,
-    ubicacion: dto.ubicacion,
-    estado: dto.estado,
-    marca: dto.marca,
-    modelo: dto.modelo,
-    numeroSerie: dto.numero_serie,
-    valorAdquisicion: dto.valor_adquisicion,
-    fechaAdquisicion: dto.fecha_adquisicion,
-    imagenUrl: dto.imagen_url,
-    tags: dto.tags ?? [],
+    name: dto.name,
+    description: dto.description ?? '',
+    category: dto.category,
+    location: dto.location ?? '',
+    status: dto.status,
+    imageUrl: dto.imageUrl ?? '',
+    acquisitionDate: dto.acquisitionDate ?? '',
+    user: dto.user ?? null,
   };
 }
 
-export function toActivoSummaryFromSearch(dto: SearchResultItemDto): ActivoSummary {
+export function toActivoSummary(dto: ActivoSummaryDto): ActivoSummary {
   return {
-    id: dto.asset_id,
-    codigo: dto.codigo,
-    nombre: dto.nombre,
-    descripcion: dto.descripcion,
-    categoria: dto.categoria,
-    ubicacion: dto.ubicacion,
-    estado: dto.estado as EstadoActivo,
-    imagenUrl: dto.imagen_url,
+    id: dto.id,
+    name: dto.name,
+    category: dto.category,
+    status: dto.status,
+    location: dto.location ?? '',
   };
 }
 
-export function toSearchResult(dto: SearchActivoResponseDto): SearchActivoResult {
+export function toPaginatedResult(dto: PaginatedActivosDtoResult): PaginatedActivosResult {
   return {
-    items: dto.results.map(toActivoSummaryFromSearch),
-    total: dto.total_results,
-    queryInterpreted: dto.query_interpreted,
-  };
-}
-
-export function toCreateActivoDto(input: CreateActivoInput): CreateActivoDto {
-  return {
-    codigo: input.codigo,
-    nombre: input.nombre,
-    descripcion: input.descripcion,
-    categoria: input.categoria,
-    ubicacion: input.ubicacion,
-    estado: input.estado,
-    marca: input.marca,
-    modelo: input.modelo,
-    numero_serie: input.numeroSerie,
-    valor_adquisicion: input.valorAdquisicion,
-    fecha_adquisicion: input.fechaAdquisicion,
-    imagen_url: input.imagenUrl,
-    tags: input.tags,
+    content: dto.content.map(toActivoSummary),
+    currentPage: dto.currentPage,
+    totalPages: dto.totalPages,
+    totalElements: dto.totalElements,
+    hasNext: dto.hasNext,
+    hasPrevious: dto.hasPrevious,
   };
 }

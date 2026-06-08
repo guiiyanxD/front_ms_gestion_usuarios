@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CreateActivoInput, EstadoActivo } from '../../../domain/models/activo.model';
+import { Activo, ActivoCategory, ActivoStatus, CreateActivoInput, UpdateActivoInput } from '../../../domain/models/activo.model';
 
 @Component({
   selector: 'app-activo-form',
@@ -11,49 +11,88 @@ import { CreateActivoInput, EstadoActivo } from '../../../domain/models/activo.m
   styleUrl: './activo-form.component.css',
 })
 export class ActivoFormComponent {
+  readonly editing = input<Activo | null>(null);
   readonly saving = input<boolean>(false);
-  readonly submitted = output<CreateActivoInput>();
+  readonly submitted = output<CreateActivoInput | UpdateActivoInput>();
   readonly cancelled = output<void>();
 
-  readonly estados: EstadoActivo[] = ['activo', 'inactivo', 'en_mantenimiento', 'dado_de_baja'];
+  readonly categories: ActivoCategory[] = [
+    'ELECTRONIC_EQUIPMENT', 'HVAC_EQUIPMENT', 'FIXTURES', 'OTHERS',
+  ];
+  readonly statuses: ActivoStatus[] = [
+    'ACTIVE', 'IN_STORAGE', 'UNDER_MAINTENANCE', 'DAMAGED', 'RETIRED', 'LOST',
+  ];
+  readonly categoryLabels: Record<ActivoCategory, string> = {
+    ELECTRONIC_EQUIPMENT: 'Equipo electrónico',
+    HVAC_EQUIPMENT: 'Equipo HVAC',
+    FIXTURES: 'Instalaciones',
+    OTHERS: 'Otros',
+  };
+  readonly statusLabels: Record<ActivoStatus, string> = {
+    ACTIVE: 'Activo',
+    IN_STORAGE: 'En almacén',
+    UNDER_MAINTENANCE: 'En mantenimiento',
+    DAMAGED: 'Dañado',
+    RETIRED: 'Retirado',
+    LOST: 'Perdido',
+  };
 
   private readonly fb = new FormBuilder();
   readonly form = this.fb.nonNullable.group({
-    codigo: ['', [Validators.required]],
-    nombre: ['', [Validators.required]],
-    descripcion: [''],
-    categoria: ['', [Validators.required]],
-    ubicacion: ['', [Validators.required]],
-    estado: ['activo' as EstadoActivo, [Validators.required]],
-    marca: ['', [Validators.required]],
-    modelo: ['', [Validators.required]],
-    numeroSerie: ['', [Validators.required]],
-    valorAdquisicion: [0, [Validators.required, Validators.min(0)]],
-    fechaAdquisicion: ['', [Validators.required]],
-    imagenUrl: [''],
-    tagsRaw: [''],
+    name: ['', [Validators.required]],
+    description: [''],
+    category: ['ELECTRONIC_EQUIPMENT' as ActivoCategory, [Validators.required]],
+    location: ['', [Validators.required]],
+    status: ['ACTIVE' as ActivoStatus, [Validators.required]],
+    imageUrl: [''],
+    acquisitionDate: ['', [Validators.required]],
+    userId: [''],
   });
+
+  constructor() {
+    effect(() => {
+      const e = this.editing();
+      if (e) {
+        this.form.patchValue({
+          name: e.name,
+          description: e.description,
+          category: e.category,
+          location: e.location,
+          status: e.status,
+          imageUrl: e.imageUrl,
+          acquisitionDate: e.acquisitionDate,
+        });
+      } else {
+        this.form.reset({ category: 'ELECTRONIC_EQUIPMENT', status: 'ACTIVE' });
+      }
+    });
+  }
 
   onSubmit(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     const v = this.form.getRawValue();
-    const tags = v.tagsRaw
-      ? v.tagsRaw.split(',').map((t) => t.trim()).filter(Boolean)
-      : [];
-    this.submitted.emit({
-      codigo: v.codigo,
-      nombre: v.nombre,
-      descripcion: v.descripcion,
-      categoria: v.categoria,
-      ubicacion: v.ubicacion,
-      estado: v.estado,
-      marca: v.marca,
-      modelo: v.modelo,
-      numeroSerie: v.numeroSerie,
-      valorAdquisicion: v.valorAdquisicion,
-      fechaAdquisicion: v.fechaAdquisicion,
-      imagenUrl: v.imagenUrl,
-      tags,
-    });
+    if (this.editing()) {
+      this.submitted.emit({
+        name: v.name,
+        description: v.description,
+        category: v.category,
+        location: v.location,
+        status: v.status,
+        imageUrl: v.imageUrl,
+        acquisitionDate: v.acquisitionDate,
+      } as UpdateActivoInput);
+    } else {
+      const input: CreateActivoInput = {
+        name: v.name,
+        description: v.description,
+        category: v.category,
+        location: v.location,
+        status: v.status,
+        imageUrl: v.imageUrl,
+        acquisitionDate: v.acquisitionDate,
+        ...(v.userId.trim() ? { userId: v.userId.trim() } : {}),
+      };
+      this.submitted.emit(input);
+    }
   }
 }

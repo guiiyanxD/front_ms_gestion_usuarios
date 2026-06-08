@@ -1,58 +1,63 @@
-export type EstadoActivo = 'activo' | 'inactivo' | 'en_mantenimiento' | 'dado_de_baja';
+export type ActivoCategory = 'ELECTRONIC_EQUIPMENT' | 'HVAC_EQUIPMENT' | 'FIXTURES' | 'OTHERS';
+export type ActivoStatus = 'ACTIVE' | 'IN_STORAGE' | 'UNDER_MAINTENANCE' | 'DAMAGED' | 'RETIRED' | 'LOST';
+
+export interface AssignedUser {
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly email: string;
+}
 
 export interface Activo {
   readonly id: string;
-  readonly codigo: string;
-  readonly nombre: string;
-  readonly descripcion: string;
-  readonly categoria: string;
-  readonly ubicacion: string;
-  readonly estado: EstadoActivo;
-  readonly marca: string;
-  readonly modelo: string;
-  readonly numeroSerie: string;
-  readonly valorAdquisicion: number;
-  readonly fechaAdquisicion: string;
-  readonly imagenUrl: string;
-  readonly tags: string[];
+  readonly name: string;
+  readonly description: string;
+  readonly category: ActivoCategory;
+  readonly location: string;
+  readonly status: ActivoStatus;
+  readonly imageUrl: string;
+  readonly acquisitionDate: string;
+  readonly user: AssignedUser | null;
 }
 
 export interface ActivoSummary {
   readonly id: string;
-  readonly codigo: string;
-  readonly nombre: string;
-  readonly descripcion: string;
-  readonly categoria: string;
-  readonly ubicacion: string;
-  readonly estado: EstadoActivo;
-  readonly imagenUrl: string;
+  readonly name: string;
+  readonly category: ActivoCategory;
+  readonly status: ActivoStatus;
+  readonly location: string;
 }
 
-export interface SearchActivoFilters {
-  readonly query: string;
-  readonly categoria: string;
-  readonly ubicacion: string;
+export interface PaginatedActivosResult {
+  readonly content: ActivoSummary[];
+  readonly currentPage: number;
+  readonly totalPages: number;
+  readonly totalElements: number;
+  readonly hasNext: boolean;
+  readonly hasPrevious: boolean;
+}
+
+export interface ListActivosFilters {
+  readonly offset: number;
   readonly limit: number;
 }
 
-export interface SearchActivoResult {
-  readonly items: ActivoSummary[];
-  readonly total: number;
-  readonly queryInterpreted: string;
+export interface CreateActivoInput {
+  readonly name: string;
+  readonly description: string;
+  readonly category: ActivoCategory;
+  readonly location: string;
+  readonly status: ActivoStatus;
+  readonly imageUrl: string;
+  readonly acquisitionDate: string;
+  readonly userId?: string;
 }
 
-export interface CreateActivoInput {
-  readonly codigo: string;
-  readonly nombre: string;
-  readonly descripcion: string;
-  readonly categoria: string;
-  readonly ubicacion: string;
-  readonly estado: EstadoActivo;
-  readonly marca: string;
-  readonly modelo: string;
-  readonly numeroSerie: string;
-  readonly valorAdquisicion: number;
-  readonly fechaAdquisicion: string;
-  readonly imagenUrl: string;
-  readonly tags: string[];
+export interface UpdateActivoInput {
+  readonly name: string;
+  readonly description: string;
+  readonly category: ActivoCategory;
+  readonly location: string;
+  readonly status: ActivoStatus;
+  readonly imageUrl: string;
+  readonly acquisitionDate: string;
 }

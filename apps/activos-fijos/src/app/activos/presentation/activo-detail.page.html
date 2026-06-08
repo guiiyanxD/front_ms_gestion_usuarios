@@ -11,8 +11,8 @@
     @let a = activo()!;
     <article class="detail__card">
       <div class="detail__image-wrap">
-        @if (a.imagenUrl) {
-          <img class="detail__image" [src]="a.imagenUrl" [alt]="a.nombre" />
+        @if (a.imageUrl) {
+          <img class="detail__image" [src]="a.imageUrl" [alt]="a.name" />
         } @else {
           <div class="detail__image-placeholder" aria-label="Sin imagen">Sin imagen</div>
         }
@@ -20,56 +20,62 @@
 
       <div class="detail__info">
         <header class="detail__header">
-          <h1 class="detail__name">{{ a.nombre }}</h1>
-          <span class="chip chip--{{ a.estado }}">{{ a.estado }}</span>
+          <h1 class="detail__name">{{ a.name }}</h1>
+          <span class="chip chip--{{ a.status }}">{{ statusLabels[a.status] }}</span>
         </header>
 
-        <p class="detail__desc">{{ a.descripcion }}</p>
+        <p class="detail__desc">{{ a.description }}</p>
 
         <dl class="detail__dl">
           <div class="detail__row">
-            <dt class="detail__dt">Código</dt>
-            <dd class="detail__dd">{{ a.codigo }}</dd>
-          </div>
-          <div class="detail__row">
             <dt class="detail__dt">Categoría</dt>
-            <dd class="detail__dd">{{ a.categoria }}</dd>
+            <dd class="detail__dd">{{ categoryLabels[a.category] }}</dd>
           </div>
           <div class="detail__row">
             <dt class="detail__dt">Ubicación</dt>
-            <dd class="detail__dd">{{ a.ubicacion }}</dd>
-          </div>
-          <div class="detail__row">
-            <dt class="detail__dt">Marca</dt>
-            <dd class="detail__dd">{{ a.marca }}</dd>
-          </div>
-          <div class="detail__row">
-            <dt class="detail__dt">Modelo</dt>
-            <dd class="detail__dd">{{ a.modelo }}</dd>
-          </div>
-          <div class="detail__row">
-            <dt class="detail__dt">Número de serie</dt>
-            <dd class="detail__dd">{{ a.numeroSerie }}</dd>
-          </div>
-          <div class="detail__row">
-            <dt class="detail__dt">Valor de adquisición</dt>
-            <dd class="detail__dd">{{ a.valorAdquisicion | number:'1.2-2' }}</dd>
+            <dd class="detail__dd">{{ a.location }}</dd>
           </div>
           <div class="detail__row">
             <dt class="detail__dt">Fecha de adquisición</dt>
-            <dd class="detail__dd">{{ a.fechaAdquisicion }}</dd>
+            <dd class="detail__dd">{{ a.acquisitionDate }}</dd>
           </div>
-          @if (a.tags.length > 0) {
-            <div class="detail__row detail__row--tags">
-              <dt class="detail__dt">Etiquetas</dt>
-              <dd class="detail__dd detail__tags">
-                @for (tag of a.tags; track tag) {
-                  <span class="tag">{{ tag }}</span>
-                }
-              </dd>
-            </div>
-          }
+          <div class="detail__row">
+            <dt class="detail__dt">Usuario asignado</dt>
+            <dd class="detail__dd">
+              @if (a.user) {
+                {{ a.user.firstName }} {{ a.user.lastName }} — {{ a.user.email }}
+              } @else {
+                Sin asignar
+              }
+            </dd>
+          </div>
         </dl>
+
+        <div class="detail__assign">
+          @if (!showAssignForm()) {
+            <button class="btn btn--ghost" type="button" (click)="showAssignForm.set(true)">
+              Asignar usuario
+            </button>
+          } @else {
+            <form class="assign-form" [formGroup]="assignForm" (ngSubmit)="onAssign()" novalidate>
+              <label class="field">
+                <span class="field__label">ID del usuario <span aria-hidden="true">*</span></span>
+                <input class="field__input" type="text" formControlName="userId" placeholder="UUID del usuario" aria-label="ID del usuario" />
+                @if (assignForm.controls.userId.touched && assignForm.controls.userId.invalid) {
+                  <span class="field__error" role="alert">Obligatorio.</span>
+                }
+              </label>
+              <div class="assign-form__actions">
+                <button class="btn btn--ghost" type="button" (click)="showAssignForm.set(false); assignForm.reset()">
+                  Cancelar
+                </button>
+                <button class="btn" type="submit" [disabled]="status() === 'saving'">
+                  {{ status() === 'saving' ? 'Asignando…' : 'Asignar' }}
+                </button>
+              </div>
+            </form>
+          }
+        </div>
       </div>
     </article>
   }
