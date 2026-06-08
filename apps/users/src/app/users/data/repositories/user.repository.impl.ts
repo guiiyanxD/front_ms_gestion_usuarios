@@ -60,6 +60,12 @@ const UPDATE_USER = gql`
   }
 `;
 
+const DELETE_USER = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id)
+  }
+`;
+
 const GET_ALL_ROLES = gql`
   query GetAllRolesForSelector {
     getAllRoles {
@@ -105,6 +111,12 @@ export class UserRepositoryImpl extends UserRepository {
         variables: { id, firstName: input.firstName, lastName: input.lastName },
       })
       .pipe(map((result) => toUser(result.data!.updateUser)));
+  }
+
+  remove(id: string): Observable<void> {
+    return this.apollo
+      .mutate({ mutation: DELETE_USER, variables: { id } })
+      .pipe(map(() => undefined));
   }
 
   listRoles(): Observable<RoleOption[]> {

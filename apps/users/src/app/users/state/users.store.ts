@@ -2,6 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { ListUsersUseCase } from '../domain/use-cases/list-users.use-case';
 import { CreateUserUseCase } from '../domain/use-cases/create-user.use-case';
 import { UpdateUserUseCase } from '../domain/use-cases/update-user.use-case';
+import { DeleteUserUseCase } from '../domain/use-cases/delete-user.use-case';
 import { ListRoleOptionsUseCase } from '../domain/use-cases/list-role-options.use-case';
 import { User, CreateUserInput, UpdateUserInput, RoleOption } from '../domain/models/user.model';
 
@@ -12,6 +13,7 @@ export class UsersStore {
   private readonly listUC = inject(ListUsersUseCase);
   private readonly createUC = inject(CreateUserUseCase);
   private readonly updateUC = inject(UpdateUserUseCase);
+  private readonly deleteUC = inject(DeleteUserUseCase);
   private readonly rolesUC = inject(ListRoleOptionsUseCase);
 
   private readonly _users = signal<User[]>([]);
@@ -55,6 +57,14 @@ export class UsersStore {
     this.updateUC.execute(id, input).subscribe({
       next: () => this.load(),
       error: () => { this._status.set('error'); this._error.set('No se pudo actualizar el usuario.'); },
+    });
+  }
+
+  remove(id: string): void {
+    this._status.set('saving');
+    this.deleteUC.execute(id).subscribe({
+      next: () => this.load(),
+      error: () => { this._status.set('error'); this._error.set('No se pudo eliminar el usuario.'); },
     });
   }
 }

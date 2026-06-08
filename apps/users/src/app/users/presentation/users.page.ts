@@ -33,6 +33,12 @@ export class UsersPage implements OnInit {
   onEdit(user: User): void { this.editing.set(user); this.showForm.set(true); }
   onCancel(): void { this.showForm.set(false); this.editing.set(null); }
 
+  onDelete(user: User): void {
+    if (confirm(`¿Eliminar al usuario "${user.firstName} ${user.lastName}"?`)) {
+      this.store.remove(user.id);
+    }
+  }
+
   onSubmit(input: CreateUserInput | UpdateUserInput): void {
     const current = this.editing();
     if (current) {

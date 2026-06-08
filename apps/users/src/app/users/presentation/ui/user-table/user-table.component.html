@@ -21,6 +21,7 @@
         </td>
         <td class="tbl__td tbl__td--actions">
           <button class="btn-sm" type="button" (click)="edit.emit(user)">Editar</button>
+          <button class="btn-sm btn-sm--danger" type="button" (click)="remove.emit(user)">Eliminar</button>
         </td>
       </tr>
     } @empty {
