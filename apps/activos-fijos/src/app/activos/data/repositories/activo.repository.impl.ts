@@ -1,10 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { forkJoin, Observable, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Apollo, gql } from 'apollo-angular';
 import { ActivoRepository } from '../../domain/repositories/activo.repository';
 import { Activo, CreateActivoInput, ListActivosFilters, PaginatedActivosResult, UpdateActivoInput } from '../../domain/models/activo.model';
-import { ActivoDto, PaginatedActivosDtoResult } from '../dto/activo.dto';
+import { ActivoDto, CreateActivoRestDto, CreateActivoRestResponseDto, PaginatedActivosDtoResult } from '../dto/activo.dto';
 import { toActivo, toPaginatedResult } from '../mappers/activo.mapper';
+
+const REST_BASE_URL = 'https://ms-ia-busqueda.duckdns.org';
 
 const GET_ALL_FIXED_ASSETS = gql`
   query GetAllFixedAssets($offset: Int!, $limit: Int!) {
@@ -117,6 +120,7 @@ const ASSIGN_FIXED_ASSET_TO_USER = gql`
 @Injectable()
 export class ActivoRepositoryImpl extends ActivoRepository {
   private readonly apollo = inject(Apollo);
+  private readonly http = inject(HttpClient);
 
   list(filters: ListActivosFilters): Observable<PaginatedActivosResult> {
     return this.apollo
@@ -139,7 +143,7 @@ export class ActivoRepositoryImpl extends ActivoRepository {
   }
 
   create(input: CreateActivoInput): Observable<Activo> {
-    const vars = {
+    const graphqlVars = {
       acquisitionDate: input.acquisitionDate,
       category: input.category,
       name: input.name,
@@ -148,17 +152,37 @@ export class ActivoRepositoryImpl extends ActivoRepository {
       imageUrl: input.imageUrl || null,
       location: input.location,
     };
-    if (input.userId) {
-      return this.apollo
-        .mutate<{ createFixedAssetWithUser: ActivoDto }>({
-          mutation: CREATE_FIXED_ASSET_WITH_USER,
-          variables: { ...vars, userId: input.userId },
-        })
-        .pipe(map((result) => toActivo(result.data!.createFixedAssetWithUser)));
-    }
-    return this.apollo
-      .mutate<{ createFixedAsset: ActivoDto }>({ mutation: CREATE_FIXED_ASSET, variables: vars })
-      .pipe(map((result) => toActivo(result.data!.createFixedAsset)));
+
+    const restDto: CreateActivoRestDto = {
+      codigo: input.codigo,
+      nombre: input.name,
+      descripcion: input.description,
+      categoria: input.category,
+      ubicacion: input.location,
+      estado: input.status,
+      marca: input.marca,
+      modelo: input.modelo,
+      fecha_adquisicion: input.acquisitionDate,
+      ...(input.imageUrl ? { imagen_url: input.imageUrl } : {}),
+      ...(input.numeroSerie ? { numero_serie: input.numeroSerie } : {}),
+      ...(input.valorAdquisicion != null ? { valor_adquisicion: input.valorAdquisicion } : {}),
+      ...(input.tags?.length ? { tags: input.tags } : {}),
+    };
+
+    const graphql$ = input.userId
+      ? this.apollo
+          .mutate<{ createFixedAssetWithUser: ActivoDto }>({
+            mutation: CREATE_FIXED_ASSET_WITH_USER,
+            variables: { ...graphqlVars, userId: input.userId },
+          })
+          .pipe(map((result) => toActivo(result.data!.createFixedAssetWithUser)))
+      : this.apollo
+          .mutate<{ createFixedAsset: ActivoDto }>({ mutation: CREATE_FIXED_ASSET, variables: graphqlVars })
+          .pipe(map((result) => toActivo(result.data!.createFixedAsset)));
+
+    const rest$ = this.http.post<CreateActivoRestResponseDto>(`${REST_BASE_URL}/assets`, restDto);
+
+    return forkJoin([graphql$, rest$]).pipe(map(([activo]) => activo));
   }
 
   update(id: string, input: UpdateActivoInput): Observable<Activo> {

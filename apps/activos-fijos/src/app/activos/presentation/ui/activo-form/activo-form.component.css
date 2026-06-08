@@ -17,6 +17,15 @@
 .btn--ghost { background: transparent; color: var(--color-ink, #0f172a); border: 1px solid #cbd5e1; }
 .btn--ghost:hover { background: var(--color-surface, #f1f5f9); }
 
+.tag-input { display: flex; gap: 8px; align-items: center; }
+.tag-input__field { flex: 1; }
+.tag-input__btn { height: 40px; white-space: nowrap; }
+
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag { display: inline-flex; align-items: center; gap: 4px; background: var(--color-primary-soft, #e0e7ff); color: var(--color-primary, #4338ca); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+.tag__remove { background: none; border: none; cursor: pointer; font-size: 12px; color: var(--color-primary, #4338ca); padding: 0; line-height: 1; }
+.tag__remove:hover { color: #dc2626; }
+
 @media (max-width: 560px) {
   .form__grid { grid-template-columns: 1fr; }
 }

@@ -50,6 +50,12 @@ export interface CreateActivoInput {
   readonly imageUrl: string;
   readonly acquisitionDate: string;
   readonly userId?: string;
+  readonly codigo: string;
+  readonly marca: string;
+  readonly modelo: string;
+  readonly numeroSerie?: string;
+  readonly valorAdquisicion?: number;
+  readonly tags?: string[];
 }
 
 export interface UpdateActivoInput {
