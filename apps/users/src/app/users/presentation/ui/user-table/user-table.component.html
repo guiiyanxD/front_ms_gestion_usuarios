@@ -5,7 +5,8 @@
       <th class="tbl__th">Email</th>
       <th class="tbl__th">Rol</th>
       <th class="tbl__th">Estado</th>
-      <th class="tbl__th tbl__th--actions">Acciones</th>
+      <th class="tbl__th tbl__th--actions">Editar</th>
+      <th class="tbl__th tbl__th--actions">Eliminar</th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +22,10 @@
         </td>
         <td class="tbl__td tbl__td--actions">
           <button class="btn-sm" type="button" (click)="edit.emit(user)">Editar</button>
-          <button class="btn-sm btn-sm--danger" type="button" (click)="remove.emit(user)">Eliminar</button>
+         
+        </td>
+        <td class="tbl__td tbl__td--actions">
+           <button class="btn-sm btn-sm--danger" type="button" (click)="remove.emit(user)">Eliminar</button>
         </td>
       </tr>
     } @empty {
