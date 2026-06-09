@@ -28,6 +28,7 @@ export class NavbarComponent {
     { label: 'Usuarios', path: '/users', roles: ['SUPERADMIN', 'GERENTE'] },
     { label: 'Activos Fijos', path: '/activos-fijos', roles: ['SUPERADMIN', 'GERENTE', 'TECNICO','ASISTENTE', 'OPERADOR'] },
     { label: 'Mantenimientos', path: '/mantenimientos', roles: ['SUPERADMIN', 'GERENTE', 'TECNICO'] },
+    { label: 'Estadísticas', path: '/estadisticas', roles: ['SUPERADMIN', 'GERENTE'] },
   ];
 
   // Menú visible: filtra los items según los roles del usuario actual.

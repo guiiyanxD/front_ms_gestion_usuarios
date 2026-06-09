@@ -30,6 +30,11 @@ export const appRoutes: Routes = [
     loadChildren: () => import('mantenimientos/Routes').then((m) => m.remoteRoutes),
   },
   {
+    path: 'estadisticas',
+    canActivate: [authGuard],
+    loadChildren: () => import('estadisticas/Routes').then((m) => m.remoteRoutes),
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>

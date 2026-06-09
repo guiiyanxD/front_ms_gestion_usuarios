@@ -3,5 +3,6 @@
   "roles": "https://front-ms-gestion-usuarios.onrender.com",
   "users": "https://mfe-users.onrender.com",
   "activos-fijos": "https://mfe-activo-fijos.onrender.com",
-  "mantenimientos": "https://mfe-mantenimientos.onrender.com"
+  "mantenimientos": "https://mfe-mantenimientos.onrender.com",
+  "estadisticas": "http://localhost:4206"
 } 
