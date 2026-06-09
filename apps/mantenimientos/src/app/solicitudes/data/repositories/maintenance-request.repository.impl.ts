@@ -18,7 +18,7 @@ const REST_BASE = environment.restBaseUrl;
 
 const GET_ALL_REQUESTS = gql`
   query GetAllMaintenanceRequests($offset: Int!, $limit: Int!) {
-    getAllMaintenancesRequests(offset: $offset, limit: $limit) {
+    getAllMaintenanceRequests(offset: $offset, limit: $limit) {
       content { id title description status createdBy createdAt updatedAt
         fixedAsset { id name category location status }
         statusChangeLog { fromStatus toStatus }
@@ -103,12 +103,12 @@ export class MaintenanceRequestRepositoryImpl extends MaintenanceRequestReposito
 
   list(filters: ListRequestsFilters): Observable<PaginatedRequestsResult> {
     return this.apollo
-      .query<{ getAllMaintenancesRequests: PaginatedRequestsDtoResult }>({
+      .query<{ getAllMaintenanceRequests: PaginatedRequestsDtoResult }>({
         query: GET_ALL_REQUESTS,
         variables: { offset: filters.offset, limit: filters.limit },
         fetchPolicy: 'network-only',
       })
-      .pipe(map((r) => toPaginatedRequests(r.data!.getAllMaintenancesRequests)));
+      .pipe(map((r) => toPaginatedRequests(r.data!.getAllMaintenanceRequests)));
   }
 
   listByStatus(status: MaintenanceRequestStatus, filters: ListRequestsFilters): Observable<PaginatedRequestsResult> {
