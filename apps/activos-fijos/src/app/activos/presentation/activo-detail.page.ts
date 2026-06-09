@@ -37,6 +37,7 @@ export class ActivoDetailPage implements OnInit {
   readonly activo = this.store.selected;
   readonly status = this.store.status;
   readonly error = this.store.error;
+  readonly userOptions = this.store.userOptions;
   readonly showAssignForm = signal(false);
 
   readonly assignForm = this.fb.nonNullable.group({
@@ -49,6 +50,7 @@ export class ActivoDetailPage implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.store.loadOne(id);
+    this.store.loadUserOptions();
   }
 
   onBack(): void {

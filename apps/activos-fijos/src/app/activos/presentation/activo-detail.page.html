@@ -59,8 +59,13 @@
           } @else {
             <form class="assign-form" [formGroup]="assignForm" (ngSubmit)="onAssign()" novalidate>
               <label class="field">
-                <span class="field__label">ID del usuario <span aria-hidden="true">*</span></span>
-                <input class="field__input" type="text" formControlName="userId" placeholder="UUID del usuario" aria-label="ID del usuario" />
+                <span class="field__label">Usuario <span aria-hidden="true">*</span></span>
+                <select class="field__input" formControlName="userId" aria-label="Usuario a asignar">
+                  <option value="">— Selecciona un usuario —</option>
+                  @for (u of userOptions(); track u.id) {
+                    <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
+                  }
+                </select>
                 @if (assignForm.controls.userId.touched && assignForm.controls.userId.invalid) {
                   <span class="field__error" role="alert">Obligatorio.</span>
                 }
