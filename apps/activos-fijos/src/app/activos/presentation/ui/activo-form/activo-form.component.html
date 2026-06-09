@@ -51,8 +51,13 @@
 
     @if (!editing()) {
       <label class="field">
-        <span class="field__label">ID de usuario (opcional)</span>
-        <input class="field__input" type="text" formControlName="userId" placeholder="UUID del usuario" aria-label="ID del usuario a asignar" />
+        <span class="field__label">Usuario (opcional)</span>
+        <select class="field__input" formControlName="userId" aria-label="Usuario a asignar">
+          <option value="">— Sin asignar —</option>
+          @for (u of userOptions(); track u.id) {
+            <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
+          }
+        </select>
       </label>
 
       <label class="field">

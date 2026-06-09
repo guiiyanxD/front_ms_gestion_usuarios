@@ -5,7 +5,9 @@ import { CreateActivoUseCase } from '../domain/use-cases/create-activo.use-case'
 import { UpdateActivoUseCase } from '../domain/use-cases/update-activo.use-case';
 import { DeleteActivoUseCase } from '../domain/use-cases/delete-activo.use-case';
 import { AssignUserUseCase } from '../domain/use-cases/assign-user.use-case';
+import { ListUserOptionsUseCase } from '../domain/use-cases/list-user-options.use-case';
 import { Activo, ActivoSummary, CreateActivoInput, UpdateActivoInput } from '../domain/models/activo.model';
+import { UserOption } from '../domain/models/user-option.model';
 
 type Status = 'idle' | 'loading' | 'saving' | 'error';
 
@@ -19,6 +21,7 @@ export class ActivosStore {
   private readonly updateUC = inject(UpdateActivoUseCase);
   private readonly deleteUC = inject(DeleteActivoUseCase);
   private readonly assignUC = inject(AssignUserUseCase);
+  private readonly listUsersUC = inject(ListUserOptionsUseCase);
 
   private readonly _activos = signal<ActivoSummary[]>([]);
   private readonly _selected = signal<Activo | null>(null);
@@ -30,6 +33,7 @@ export class ActivosStore {
   private readonly _totalElements = signal(0);
   private readonly _hasNext = signal(false);
   private readonly _hasPrevious = signal(false);
+  private readonly _userOptions = signal<UserOption[]>([]);
 
   readonly activos = this._activos.asReadonly();
   readonly selected = this._selected.asReadonly();
@@ -41,8 +45,16 @@ export class ActivosStore {
   readonly totalElements = this._totalElements.asReadonly();
   readonly hasNext = this._hasNext.asReadonly();
   readonly hasPrevious = this._hasPrevious.asReadonly();
+  readonly userOptions = this._userOptions.asReadonly();
   readonly isLoading = computed(() => this._status() === 'loading');
   readonly isSaving = computed(() => this._status() === 'saving');
+
+  loadUserOptions(): void {
+    this.listUsersUC.execute().subscribe({
+      next: (users) => this._userOptions.set(users),
+      error: () => this._userOptions.set([]),
+    });
+  }
 
   load(offset = 0): void {
     this._status.set('loading');

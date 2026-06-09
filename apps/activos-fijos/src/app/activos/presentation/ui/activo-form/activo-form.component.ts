@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Activo, ActivoCategory, ActivoStatus, CreateActivoInput, UpdateActivoInput } from '../../../domain/models/activo.model';
+import { UserOption } from '../../../domain/models/user-option.model';
 
 @Component({
   selector: 'app-activo-form',
@@ -13,6 +14,7 @@ import { Activo, ActivoCategory, ActivoStatus, CreateActivoInput, UpdateActivoIn
 export class ActivoFormComponent {
   readonly editing = input<Activo | null>(null);
   readonly saving = input<boolean>(false);
+  readonly userOptions = input<UserOption[]>([]);
   readonly submitted = output<CreateActivoInput | UpdateActivoInput>();
   readonly cancelled = output<void>();
 

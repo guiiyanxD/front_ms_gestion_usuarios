@@ -26,6 +26,7 @@ export class ActivosPage implements OnInit {
   readonly totalElements = this.store.totalElements;
   readonly hasNext = this.store.hasNext;
   readonly hasPrevious = this.store.hasPrevious;
+  readonly userOptions = this.store.userOptions;
 
   readonly showForm = signal(false);
   readonly editingActivo = signal<Activo | null>(null);
@@ -42,6 +43,7 @@ export class ActivosPage implements OnInit {
 
   ngOnInit(): void {
     this.store.load();
+    this.store.loadUserOptions();
   }
 
   onNew(): void {
