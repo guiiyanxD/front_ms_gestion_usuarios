@@ -12,8 +12,9 @@ import {
   CreateMaintenanceRequestRestDto, UpdateStatusRestDto,
 } from '../dto/maintenance-request.dto';
 import { toMaintenanceRequest, toPaginatedRequests } from '../mappers/maintenance-request.mapper';
+import { environment } from '../../../../environments/environment';
 
-const REST_BASE = 'https://ms-bi-automation.onrender.com/api/v1';
+const REST_BASE = environment.restBaseUrl;
 
 const GET_ALL_REQUESTS = gql`
   query GetAllMaintenanceRequests($offset: Int!, $limit: Int!) {

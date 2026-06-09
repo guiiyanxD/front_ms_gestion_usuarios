@@ -3,8 +3,9 @@ import { Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AreaOptionRepository } from './area-option.repository';
 import { AreaOption } from './area-option.model';
+import { environment } from '../../../environments/environment';
 
-const AREAS_URL = 'https://ms-bi-automation.onrender.com/api/v1/catalogo/areas';
+const AREAS_URL = `${environment.restBaseUrl}/catalogo/areas`;
 
 @Injectable()
 export class AreaOptionRepositoryImpl extends AreaOptionRepository {
