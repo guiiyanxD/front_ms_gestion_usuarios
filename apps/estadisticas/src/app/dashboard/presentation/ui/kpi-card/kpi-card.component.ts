@@ -20,6 +20,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class KpiCardComponent {
   readonly label = input.required<string>();
-  readonly value = input.required<string | number>();
+  readonly value = input.required<string | number | null>();
   readonly unit = input<string>('');
 }
