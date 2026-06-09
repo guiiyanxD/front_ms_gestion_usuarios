@@ -25,6 +25,11 @@ export const appRoutes: Routes = [
     loadChildren: () => import('activos-fijos/Routes').then((m) => m.remoteRoutes),
   },
   {
+    path: 'mantenimientos',
+    canActivate: [authGuard],
+    loadChildren: () => import('mantenimientos/Routes').then((m) => m.remoteRoutes),
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () =>

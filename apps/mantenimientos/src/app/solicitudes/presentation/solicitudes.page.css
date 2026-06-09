@@ -1,0 +1,14 @@
+.page { padding: 24px; font-family: var(--font, system-ui, sans-serif); }
+.page__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.page__title { font-size: 22px; font-weight: 700; color: var(--color-ink, #0f172a); margin: 0; }
+.page__alert { background: #fef2f2; color: #dc2626; border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; }
+.page__msg { color: #64748b; }
+.page__empty { color: #94a3b8; grid-column: 1/-1; text-align: center; padding: 32px; }
+.page__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.page__pagination { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+.page__page-info { font-size: 14px; color: #64748b; }
+.btn { height: 40px; padding: 0 18px; border: none; border-radius: 10px; background: var(--color-primary, #4338ca); color: #fff; font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn:hover { background: #3730a3; }
+.btn:disabled { background: #94a3b8; cursor: not-allowed; }
+.btn--ghost { background: transparent; color: var(--color-ink, #0f172a); border: 1px solid #cbd5e1; }
+.btn--ghost:hover { background: #f1f5f9; }

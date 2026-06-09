@@ -1,0 +1,23 @@
+.card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.card__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.card__title { font-size: 15px; font-weight: 700; color: var(--color-ink, #0f172a); }
+.card__asset { font-size: 13px; color: #64748b; }
+.card__desc { font-size: 13px; color: #475569; }
+.card__meta { font-size: 12px; color: #94a3b8; }
+.card__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+
+.badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+.badge--PENDING { background: #fef9c3; color: #854d0e; }
+.badge--APPROVED { background: #dbeafe; color: #1d4ed8; }
+.badge--COMPLETED { background: #dcfce7; color: #166534; }
+.badge--REJECTED { background: #fee2e2; color: #dc2626; }
+
+.btn { height: 36px; padding: 0 14px; border: none; border-radius: 8px; background: var(--color-primary, #4338ca); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn--sm { height: 32px; padding: 0 10px; font-size: 12px; }
+.btn--ghost { background: transparent; color: var(--color-ink, #0f172a); border: 1px solid #cbd5e1; }
+.btn--ghost:hover { background: #f1f5f9; }
+.btn--success { background: #16a34a; }
+.btn--success:hover { background: #15803d; }
+.btn--danger { background: #dc2626; }
+.btn--danger:hover { background: #b91c1c; }
+.btn--icon { width: 32px; padding: 0; }

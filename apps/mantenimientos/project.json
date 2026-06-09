@@ -1,0 +1,95 @@
+{
+  "name": "mantenimientos",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/mantenimientos/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/mantenimientos",
+        "index": "apps/mantenimientos/src/index.html",
+        "main": "apps/mantenimientos/src/main.ts",
+        "tsConfig": "apps/mantenimientos/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/mantenimientos/public"
+          }
+        ],
+        "styles": ["apps/mantenimientos/src/styles.css"],
+        "customWebpackConfig": {
+          "path": "apps/mantenimientos/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/mantenimientos/src/environments/environment.ts",
+              "with": "apps/mantenimientos/src/environments/environment.prod.ts"
+            }
+          ],
+          "budgets": [
+            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "4kb", "maximumError": "8kb" }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/mantenimientos/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4205,
+        "publicHost": "http://localhost:4205"
+      },
+      "configurations": {
+        "production": { "buildTarget": "mantenimientos:build:production" },
+        "development": { "buildTarget": "mantenimientos:build:development" }
+      },
+      "defaultConfiguration": "development",
+      "dependsOn": ["shell:serve"]
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": { "buildTarget": "mantenimientos:build" }
+    },
+    "lint": { "executor": "@nx/eslint:lint" },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": { "reportsDirectory": "coverage/apps/mantenimientos" }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "mantenimientos:build",
+        "port": 4205,
+        "watch": false
+      },
+      "configurations": {
+        "development": { "buildTarget": "mantenimientos:build:development" },
+        "production": { "buildTarget": "mantenimientos:build:production" }
+      }
+    }
+  }
+}

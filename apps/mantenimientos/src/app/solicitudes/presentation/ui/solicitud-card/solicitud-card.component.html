@@ -1,0 +1,20 @@
+<article class="card">
+  <div class="card__head">
+    <span class="card__title">{{ request().title }}</span>
+    <span class="badge badge--{{ request().status }}">{{ statusLabels[request().status] }}</span>
+  </div>
+  <p class="card__asset">{{ request().fixedAsset.name }} — {{ request().fixedAsset.location }}</p>
+  <p class="card__desc">{{ request().description }}</p>
+  <p class="card__meta">Creado por: {{ request().createdBy }} · {{ request().createdAt | slice:0:10 }}</p>
+  <div class="card__actions">
+    <button class="btn btn--ghost btn--sm" type="button" (click)="view.emit(request())">Ver detalle</button>
+    @if (showTomar() && request().status === 'PENDING') {
+      <button class="btn btn--sm" type="button" (click)="tomar.emit(request())">Tomar responsabilidad</button>
+    }
+    @if (showCerrar() && request().status === 'APPROVED') {
+      <button class="btn btn--success btn--sm" type="button" (click)="completar.emit(request())">Completar</button>
+      <button class="btn btn--danger btn--sm" type="button" (click)="rechazar.emit(request())">Rechazar</button>
+    }
+    <button class="btn btn--ghost btn--sm btn--icon" type="button" aria-label="Eliminar" (click)="remove.emit(request())">✕</button>
+  </div>
+</article>

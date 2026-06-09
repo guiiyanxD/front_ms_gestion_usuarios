@@ -1,0 +1,28 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <h3 class="form__title">Tomar responsabilidad</h3>
+  <div class="form__grid">
+    <label class="field">
+      <span class="field__label">Tipo de mantenimiento <span aria-hidden="true">*</span></span>
+      <select class="field__input" formControlName="type" aria-label="Tipo de mantenimiento">
+        @for (t of types; track t) {
+          <option [value]="t">{{ typeLabels[t] }}</option>
+        }
+      </select>
+    </label>
+    <label class="field">
+      <span class="field__label">URL de imagen (opcional)</span>
+      <input class="field__input" type="url" formControlName="imageUrl" placeholder="https://..." aria-label="URL de imagen" />
+    </label>
+    <label class="field field--full">
+      <span class="field__label">Diagnóstico / descripción <span aria-hidden="true">*</span></span>
+      <textarea class="field__input field__textarea" formControlName="description" rows="3" aria-label="Descripción"></textarea>
+      @if (form.controls.description.touched && form.controls.description.invalid) {
+        <span class="field__error" role="alert">Obligatorio.</span>
+      }
+    </label>
+  </div>
+  <div class="form__actions">
+    <button class="btn btn--ghost" type="button" (click)="cancelled.emit()">Cancelar</button>
+    <button class="btn" type="submit" [disabled]="saving()">{{ saving() ? 'Procesando…' : 'Confirmar' }}</button>
+  </div>
+</form>

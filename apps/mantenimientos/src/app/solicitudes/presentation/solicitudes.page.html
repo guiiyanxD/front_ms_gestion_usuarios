@@ -1,0 +1,68 @@
+<main class="page">
+  <header class="page__head">
+    <h1 class="page__title">
+      @if (session.isAdmin()) { Todas las solicitudes }
+      @else if (session.isTecnico()) { Solicitudes pendientes }
+      @else { Mis solicitudes }
+    </h1>
+    <button class="btn" type="button" (click)="onNew()">Nueva solicitud</button>
+  </header>
+
+  @if (status() === 'error') {
+    <p class="page__alert" role="alert">{{ error() }}</p>
+  }
+
+  @if (activeModal() === 'nueva-solicitud') {
+    <app-solicitud-form
+      [saving]="isSaving()"
+      [fixedAssets]="fixedAssets()"
+      [areas]="areas()"
+      (submitted)="onSolicitudSubmit($event)"
+      (cancelled)="onCancel()"
+    />
+  } @else if (activeModal() === 'tomar') {
+    <app-tomar-form
+      [saving]="mantStore.isSaving()"
+      [maintenanceRequestId]="selectedRequest()!.id"
+      [userId]="session.userId"
+      (submitted)="onTomarSubmit($event)"
+      (cancelled)="onCancel()"
+    />
+  } @else if (activeModal() === 'completar' || activeModal() === 'rechazar') {
+    <app-completar-rechazar-form
+      [saving]="isSaving()"
+      [mode]="activeModal() === 'completar' ? 'completar' : 'rechazar'"
+      (submitted)="onCerrarSubmit($event)"
+      (cancelled)="onCancel()"
+    />
+  } @else {
+    @if (status() === 'loading') {
+      <p class="page__msg">Cargando solicitudes…</p>
+    } @else {
+      <section class="page__grid">
+        @for (r of requests(); track r.id) {
+          <app-solicitud-card
+            [request]="r"
+            [showTomar]="session.isTecnico()"
+            [showCerrar]="session.isTecnico() || session.isAdmin()"
+            (view)="onView($event)"
+            (tomar)="onTomar($event)"
+            (completar)="onCompletar($event)"
+            (rechazar)="onRechazar($event)"
+            (remove)="onDelete($event)"
+          />
+        } @empty {
+          <p class="page__empty">No hay solicitudes.</p>
+        }
+      </section>
+
+      @if (totalPages() > 1) {
+        <div class="page__pagination">
+          <button class="btn btn--ghost" type="button" [disabled]="!hasPrevious()" (click)="onPrevPage()">← Anterior</button>
+          <span class="page__page-info">Página {{ currentPage() }} de {{ totalPages() }}</span>
+          <button class="btn btn--ghost" type="button" [disabled]="!hasNext()" (click)="onNextPage()">Siguiente →</button>
+        </div>
+      }
+    }
+  }
+</main>
