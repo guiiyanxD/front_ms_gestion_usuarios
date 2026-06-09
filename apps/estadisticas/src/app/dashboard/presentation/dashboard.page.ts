@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { DashboardStore } from '../state/dashboard.store';
 import { KpiCardComponent } from './ui/kpi-card/kpi-card.component';
+import { SkeletonCardComponent } from './ui/skeleton-card/skeleton-card.component';
 
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [KpiCardComponent, DecimalPipe, DatePipe],
+  imports: [KpiCardComponent, SkeletonCardComponent, DecimalPipe, DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.css',
