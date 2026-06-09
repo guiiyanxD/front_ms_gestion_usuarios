@@ -22,7 +22,7 @@ type ActiveModal = null | 'nueva-solicitud' | 'tomar' | 'completar' | 'rechazar'
 })
 export class SolicitudesPage implements OnInit {
   private readonly store = inject(SolicitudesStore);
-  private readonly mantStore = inject(MantenimientosStore);
+  readonly mantStore = inject(MantenimientosStore);
   readonly session = inject(SessionService);
   private readonly router = inject(Router);
 

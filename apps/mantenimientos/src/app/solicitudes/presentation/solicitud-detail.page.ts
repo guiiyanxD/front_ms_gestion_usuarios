@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SolicitudesStore } from '../state/solicitudes.store';
 import { MantenimientosStore } from '../../mantenimientos/state/mantenimientos.store';
@@ -17,7 +18,7 @@ const STATUS_LABELS: Record<MaintenanceRequestStatus, string> = {
 @Component({
   selector: 'app-solicitud-detail-page',
   standalone: true,
-  imports: [TomarFormComponent, CompletarRechazarFormComponent],
+  imports: [TomarFormComponent, CompletarRechazarFormComponent, SlicePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-detail.page.html',
   styleUrl: './solicitud-detail.page.css',

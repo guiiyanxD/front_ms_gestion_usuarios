@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { MaintenanceRequest, MaintenanceRequestStatus } from '../../../domain/models/maintenance-request.model';
 
 const STATUS_LABELS: Record<MaintenanceRequestStatus, string> = {
@@ -11,6 +12,7 @@ const STATUS_LABELS: Record<MaintenanceRequestStatus, string> = {
 @Component({
   selector: 'app-solicitud-card',
   standalone: true,
+  imports: [SlicePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './solicitud-card.component.html',
   styleUrl: './solicitud-card.component.css',
