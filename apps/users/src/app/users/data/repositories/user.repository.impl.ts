@@ -1,10 +1,13 @@
 import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Apollo, gql } from 'apollo-angular';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
 import { UserRepository } from '../../domain/repositories/user.repository';
 import { User, CreateUserInput, UpdateUserInput, RoleOption } from '../../domain/models/user.model';
-import { UserDto, RoleDto } from '../dto/user.dto';
+import { UserDto, RoleDto, CreateUserRestDto } from '../dto/user.dto';
 import { toUser, toRoleOption } from '../mappers/user.mapper';
+
+const REST_BASE_URL = 'https://ms-bi-automation.onrender.com/api/v1';
 
 const GET_ALL_USERS = gql`
   query GetAllUsers {
@@ -79,6 +82,7 @@ const GET_ALL_ROLES = gql`
 @Injectable()
 export class UserRepositoryImpl extends UserRepository {
   private readonly apollo = inject(Apollo);
+  private readonly http   = inject(HttpClient);
 
   list(): Observable<User[]> {
     return this.apollo
@@ -90,7 +94,7 @@ export class UserRepositoryImpl extends UserRepository {
   }
 
   create(input: CreateUserInput): Observable<User> {
-    return this.apollo
+    const graphql$ = this.apollo
       .mutate<{ createUser: UserDto }>({
         mutation: CREATE_USER,
         variables: {
@@ -102,6 +106,18 @@ export class UserRepositoryImpl extends UserRepository {
         },
       })
       .pipe(map((result) => toUser(result.data!.createUser)));
+
+    const restDto: CreateUserRestDto = {
+      email: input.email,
+      firstname: input.firstName,
+      lastname: input.lastName,
+      role: input.roleName,
+      password: input.password,
+      enabled: true,
+    };
+    const rest$ = this.http.post(`${REST_BASE_URL}/usuarios`, restDto);
+
+    return forkJoin([graphql$, rest$]).pipe(map(([user]) => user));
   }
 
   update(id: string, input: UpdateUserInput): Observable<User> {

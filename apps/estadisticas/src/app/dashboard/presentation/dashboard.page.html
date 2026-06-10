@@ -19,44 +19,68 @@
     </div>
   }
 
-  <!-- Skeleton mientras carga -->
+  <!-- ── Skeleton mientras carga ─────────────────────── -->
   @if (store.isLoading()) {
+
+    <!-- Skeleton 1: Disponibilidad -->
     <section class="section">
       <div class="section__title-skeleton skeleton"></div>
       <div class="kpi-grid">
-        @for (_ of [1,2,3,4,5,6]; track $index) {
-          <app-skeleton-card />
-        }
+        @for (_ of [1,2,3,4,5,6]; track $index) { <app-skeleton-card /> }
       </div>
     </section>
+
+    <!-- Skeleton 2: Indicadores -->
     <section class="section">
       <div class="section__title-skeleton skeleton"></div>
       <div class="kpi-grid">
-        @for (_ of [1,2,3,4,5]; track $index) {
-          <app-skeleton-card />
-        }
+        @for (_ of [1,2,3,4,5]; track $index) { <app-skeleton-card /> }
       </div>
     </section>
+
+    <!-- Skeleton 3: Gráfico de cumplimiento -->
+    <section class="section">
+      <div class="section__title-skeleton skeleton"></div>
+      <div class="skeleton-chart-wrap">
+        <div class="skeleton-chart">
+          @for (h of [80, 110, 55, 140, 130, 75, 30]; track $index) {
+            <div class="skeleton-chart__group">
+              <div class="skeleton skeleton-chart__bar" [style.height.px]="h"></div>
+              <div class="skeleton skeleton-chart__bar" [style.height.px]="h * 0.75"></div>
+            </div>
+          }
+        </div>
+        <div class="skeleton-periods">
+          @for (_ of [1,2,3,4,5,6,7]; track $index) {
+            <div class="skeleton skeleton-period"></div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Skeleton 4: Top costos -->
     <section class="section">
       <div class="section__title-skeleton skeleton"></div>
       <div class="skeleton skeleton--table"></div>
     </section>
+
   }
 
-  <!-- Datos reales con fade-up por sección -->
+  <!-- ── Datos reales (fade-up escalonado) ──────────── -->
   @if (store.dashboard(); as d) {
 
+    <!-- 1. Disponibilidad -->
     <section class="section section--anim" style="--delay: 0ms">
       <h2 class="section__title">
         <span class="section__dot section__dot--primary"></span>
         Disponibilidad de activos
       </h2>
       <div class="kpi-grid">
-        <app-kpi-card label="Total activos"        [value]="d.disponibilidad.totalActivos"         variant="neutral" />
-        <app-kpi-card label="Operativos"           [value]="d.disponibilidad.activosOperativos"     variant="success" />
-        <app-kpi-card label="En mantenimiento"     [value]="d.disponibilidad.activosEnMantenimiento" variant="warning" />
-        <app-kpi-card label="Fuera de servicio"    [value]="d.disponibilidad.activosFueraServicio"  variant="danger"  />
-        <app-kpi-card label="De baja"              [value]="d.disponibilidad.activosBaja"           variant="danger"  />
+        <app-kpi-card label="Total activos"        [value]="d.disponibilidad.totalActivos"            variant="neutral"  />
+        <app-kpi-card label="Operativos"           [value]="d.disponibilidad.activosOperativos"        variant="success"  />
+        <app-kpi-card label="En mantenimiento"     [value]="d.disponibilidad.activosEnMantenimiento"   variant="warning"  />
+        <app-kpi-card label="Fuera de servicio"    [value]="d.disponibilidad.activosFueraServicio"     variant="danger"   />
+        <app-kpi-card label="De baja"              [value]="d.disponibilidad.activosBaja"              variant="danger"   />
         <app-kpi-card
           label="Tasa de disponibilidad"
           [value]="d.disponibilidad.tasaDisponibilidadPct | number:'1.2-2'"
@@ -66,6 +90,7 @@
       </div>
     </section>
 
+    <!-- 2. Indicadores MTTR / MTBF -->
     <section class="section section--anim" style="--delay: 90ms">
       <h2 class="section__title">
         <span class="section__dot section__dot--neutral"></span>
@@ -103,7 +128,17 @@
       </div>
     </section>
 
+    <!-- 3. Cumplimiento preventivo — gráfico -->
     <section class="section section--anim" style="--delay: 180ms">
+      <h2 class="section__title">
+        <span class="section__dot section__dot--primary"></span>
+        Cumplimiento de mantenimiento preventivo
+      </h2>
+      <app-cumplimiento-chart [items]="d.cumplimientoPreventivo" />
+    </section>
+
+    <!-- 4. Top 10 costos -->
+    <section class="section section--anim" style="--delay: 270ms">
       <h2 class="section__title">
         <span class="section__dot section__dot--warning"></span>
         Top 10 activos por costo de mantenimiento
@@ -131,56 +166,6 @@
                 <td class="table__num">{{ item.numMantenimientos }}</td>
                 <td class="table__num table__num--bold">{{ item.costoTotal | number:'1.2-2' }}</td>
                 <td class="table__num">{{ item.costoPromedio | number:'1.2-2' }}</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="section section--anim" style="--delay: 270ms">
-      <h2 class="section__title">
-        <span class="section__dot section__dot--primary"></span>
-        Cumplimiento de mantenimiento preventivo
-      </h2>
-      <div class="table-wrap">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Período</th>
-              <th class="table__num">Total</th>
-              <th class="table__num">Completados</th>
-              <th class="table__num">Cumplimiento</th>
-              <th>Progreso</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (item of d.cumplimientoPreventivo; track item.periodo) {
-              <tr class="table__row">
-                <td class="table__period">{{ item.periodo | date:'MMM yyyy' }}</td>
-                <td class="table__num">{{ item.preventivosTotal }}</td>
-                <td class="table__num">{{ item.preventivosCompletados }}</td>
-                <td class="table__num">
-                  <span
-                    class="badge"
-                    [class.badge--ok]="item.cumplimientoPct >= 75"
-                    [class.badge--warn]="item.cumplimientoPct >= 50 && item.cumplimientoPct < 75"
-                    [class.badge--bad]="item.cumplimientoPct < 50"
-                  >
-                    {{ item.cumplimientoPct | number:'1.1-1' }}%
-                  </span>
-                </td>
-                <td class="table__bar-cell">
-                  <div class="progress">
-                    <div
-                      class="progress__fill"
-                      [class.progress__fill--ok]="item.cumplimientoPct >= 75"
-                      [class.progress__fill--warn]="item.cumplimientoPct >= 50 && item.cumplimientoPct < 75"
-                      [class.progress__fill--bad]="item.cumplimientoPct < 50"
-                      [style.width.%]="item.cumplimientoPct"
-                    ></div>
-                  </div>
-                </td>
               </tr>
             }
           </tbody>

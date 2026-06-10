@@ -15,6 +15,7 @@ export interface CreateUserInput {
   readonly email: string;
   readonly password: string;
   readonly roleId: string;
+  readonly roleName: string;
 }
 
 // updateUser solo acepta firstName y lastName en el API.

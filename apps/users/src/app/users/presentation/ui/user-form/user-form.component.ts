@@ -52,7 +52,8 @@ export class UserFormComponent {
     if (this.editing()) {
       this.submitted.emit({ firstName, lastName });
     } else {
-      this.submitted.emit({ firstName, lastName, email, password, roleId });
+      const roleName = this.roleOptions().find((r) => r.id === roleId)?.name ?? '';
+      this.submitted.emit({ firstName, lastName, email, password, roleId, roleName });
     }
   }
 }

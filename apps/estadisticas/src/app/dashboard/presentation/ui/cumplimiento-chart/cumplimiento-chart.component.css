@@ -1,0 +1,96 @@
+/* ── Contenedor ─────────────────────────────────────── */
+.chart-wrap { display: flex; flex-direction: column; gap: 1.25rem; }
+
+/* ── Leyenda ─────────────────────────────────────────  */
+.legend { display: flex; gap: 1.5rem; font-size: .78rem; color: #64748b; }
+.legend__item { display: flex; align-items: center; gap: .45rem; }
+.dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.dot--total { background: #c7d2fe; }
+.dot--done  { background: #4338ca; }
+
+/* ── SVG ─────────────────────────────────────────────  */
+.svg-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  padding: .5rem 0 .25rem;
+}
+
+.gridline { stroke: #f1f5f9; stroke-width: 1; }
+.axis     { stroke: #e2e8f0; stroke-width: 1.5; stroke-linecap: round; }
+
+.y-label {
+  fill: #94a3b8;
+  font-size: 10px;
+  font-family: system-ui, sans-serif;
+  text-anchor: end;
+}
+.x-label {
+  fill: #64748b;
+  font-size: 10px;
+  font-family: system-ui, sans-serif;
+  text-anchor: middle;
+}
+
+.bar {
+  cursor: default;
+  transition: opacity .12s ease, filter .12s ease;
+}
+.bar:hover { opacity: .78; filter: brightness(1.05); }
+.bar--total { fill: #c7d2fe; }
+.bar--done  { fill: #4338ca; }
+
+/* ── Tarjetas de período ─────────────────────────────  */
+.periods {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: .75rem;
+}
+.period {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: .75rem;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  transition: box-shadow .12s ease, transform .12s ease;
+}
+.period:hover {
+  box-shadow: 0 4px 12px rgba(67,56,202,.08);
+  transform: translateY(-2px);
+}
+
+.period__label {
+  font-size: .68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.period__ratio { font-size: .72rem; color: #94a3b8; }
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: .18rem .55rem;
+  border-radius: 20px;
+  font-size: .72rem;
+  font-weight: 700;
+  align-self: flex-start;
+}
+.badge--ok   { background: #dcfce7; color: #15803d; }
+.badge--warn { background: #fef9c3; color: #92400e; }
+.badge--bad  { background: #fee2e2; color: #b91c1c; }
+
+/* Barra de progreso */
+.prog { height: 5px; background: #f1f5f9; border-radius: 99px; overflow: hidden; }
+.prog__fill { height: 100%; border-radius: 99px; transition: width .45s ease; }
+.prog__fill--ok   { background: #16a34a; }
+.prog__fill--warn { background: #d97706; }
+.prog__fill--bad  { background: #dc2626; }
+
+.empty { color: #94a3b8; font-size: .875rem; }

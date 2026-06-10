@@ -118,6 +118,27 @@
   border-radius: 10px;
 }
 
+/* Skeleton específico del gráfico */
+.skeleton-chart-wrap { display: flex; flex-direction: column; gap: 1rem; }
+.skeleton-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 180px;
+  padding: 1rem 1rem .5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+.skeleton-chart__group { flex: 1; display: flex; align-items: flex-end; gap: 3px; }
+.skeleton-chart__bar   { flex: 1; border-radius: 3px; }
+.skeleton-periods {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: .75rem;
+}
+.skeleton-period { height: 80px; border-radius: 8px; }
+
 /* ── Tabla ───────────────────────────────────────────── */
 .table-wrap {
   overflow-x: auto;

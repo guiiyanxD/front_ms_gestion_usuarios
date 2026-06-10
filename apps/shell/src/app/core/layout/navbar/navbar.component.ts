@@ -27,7 +27,7 @@ export class NavbarComponent {
     { label: 'Roles', path: '/roles', roles: ['SUPERADMIN', 'GERENTE'] },
     { label: 'Usuarios', path: '/users', roles: ['SUPERADMIN', 'GERENTE'] },
     { label: 'Activos Fijos', path: '/activos-fijos', roles: ['SUPERADMIN', 'GERENTE', 'TECNICO','ASISTENTE', 'OPERADOR'] },
-    { label: 'Mantenimientos', path: '/mantenimientos', roles: ['SUPERADMIN', 'GERENTE', 'TECNICO'] },
+    { label: 'Mantenimientos', path: '/mantenimientos', roles: ['SUPERADMIN', 'GERENTE', 'TECNICO', 'OPERADOR'] },
     { label: 'Estadísticas', path: '/estadisticas', roles: ['SUPERADMIN', 'GERENTE'] },
   ];
 

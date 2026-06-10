@@ -1,0 +1,79 @@
+<div class="chart-wrap">
+
+  <div class="legend">
+    <span class="legend__item"><span class="dot dot--total"></span>Total planificado</span>
+    <span class="legend__item"><span class="dot dot--done"></span>Completados</span>
+  </div>
+
+  @if (chart(); as c) {
+
+    <div class="svg-container">
+      <svg
+        [attr.viewBox]="'0 0 ' + VW + ' ' + VH"
+        width="100%"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Gráfico de cumplimiento de mantenimiento preventivo por período"
+      >
+        <!-- Gridlines + etiquetas Y -->
+        @for (g of c.gridlines; track g.value) {
+          <line [attr.x1]="PL" [attr.y1]="g.y" [attr.x2]="PL + CW" [attr.y2]="g.y" class="gridline" />
+          <text [attr.x]="PL - 7" [attr.y]="g.y + 4" class="y-label">{{ g.value }}</text>
+        }
+
+        <!-- Ejes -->
+        <line [attr.x1]="PL" [attr.y1]="BASE_Y" [attr.x2]="PL + CW" [attr.y2]="BASE_Y" class="axis" />
+        <line [attr.x1]="PL" [attr.y1]="PT"     [attr.x2]="PL"      [attr.y2]="BASE_Y"  class="axis" />
+
+        <!-- Grupos de barras -->
+        @for (g of c.groups; track g.item.periodo) {
+          <!-- Barra total -->
+          <rect
+            [attr.x]="g.total.x" [attr.y]="g.total.y"
+            [attr.width]="g.total.w" [attr.height]="g.total.h"
+            rx="3" class="bar bar--total"
+          ><title>Total planificado: {{ g.item.preventivosTotal }}</title></rect>
+
+          <!-- Barra completados -->
+          <rect
+            [attr.x]="g.done.x" [attr.y]="g.done.y"
+            [attr.width]="g.done.w" [attr.height]="g.done.h"
+            rx="3" class="bar bar--done"
+          ><title>Completados: {{ g.item.preventivosCompletados }}</title></rect>
+
+          <!-- Etiqueta eje X -->
+          <text [attr.x]="g.cx" [attr.y]="g.lbY" class="x-label">{{ g.label }}</text>
+        }
+      </svg>
+    </div>
+
+    <!-- Tarjetas de detalle por período -->
+    <div class="periods">
+      @for (g of c.groups; track g.item.periodo) {
+        <div class="period">
+          <span class="period__label">{{ g.label }}</span>
+          <span
+            class="badge"
+            [class.badge--ok]="g.item.cumplimientoPct >= 75"
+            [class.badge--warn]="g.item.cumplimientoPct >= 50 && g.item.cumplimientoPct < 75"
+            [class.badge--bad]="g.item.cumplimientoPct < 50"
+          >{{ g.item.cumplimientoPct | number:'1.1-1' }}%</span>
+          <div class="prog">
+            <div
+              class="prog__fill"
+              [class.prog__fill--ok]="g.item.cumplimientoPct >= 75"
+              [class.prog__fill--warn]="g.item.cumplimientoPct >= 50 && g.item.cumplimientoPct < 75"
+              [class.prog__fill--bad]="g.item.cumplimientoPct < 50"
+              [style.width.%]="g.item.cumplimientoPct"
+            ></div>
+          </div>
+          <span class="period__ratio">{{ g.item.preventivosCompletados }}/{{ g.item.preventivosTotal }}</span>
+        </div>
+      }
+    </div>
+
+  } @else {
+    <p class="empty">Sin datos de cumplimiento.</p>
+  }
+
+</div>

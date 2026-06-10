@@ -1,3 +1,12 @@
+export interface CreateUserRestDto {
+  readonly email: string;
+  readonly firstname: string;
+  readonly lastname: string;
+  readonly role: string;
+  readonly password: string;
+  readonly enabled: boolean;
+}
+
 export interface RoleDto {
   id: string;
   name: string;
