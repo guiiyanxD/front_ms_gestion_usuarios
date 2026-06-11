@@ -81,6 +81,7 @@ export class ActivosPage implements OnInit {
   }
 
   onView(activo: ActivoSummary): void {
+    this.store.selectFromList(activo);
     this.router.navigate(['activos-fijos', activo.id]);
   }
 

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivosStore } from '../state/activos.store';
@@ -23,7 +24,7 @@ const STATUS_LABELS: Record<ActivoStatus, string> = {
 @Component({
   selector: 'app-activo-detail-page',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './activo-detail.page.html',
   styleUrl: './activo-detail.page.css',

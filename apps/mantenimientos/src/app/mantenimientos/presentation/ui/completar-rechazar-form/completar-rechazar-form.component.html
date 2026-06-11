@@ -1,32 +1,23 @@
 <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-  <h3 class="form__title">{{ mode() === 'completar' ? 'Completar mantenimiento' : 'Rechazar solicitud' }}</h3>
+  <h3 class="form__title">Completar mantenimiento</h3>
 
-  @if (mode() === 'completar') {
-    <label class="field">
-      <span class="field__label">Solución aplicada <span aria-hidden="true">*</span></span>
-      <textarea class="field__input field__textarea" formControlName="solucion" rows="3" aria-label="Solución"></textarea>
-      @if (form.controls.solucion.touched && form.controls.solucion.errors?.['required']) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
-    <label class="field">
-      <span class="field__label">Costo (opcional)</span>
-      <input class="field__input" type="number" min="0" step="0.01" formControlName="costo" aria-label="Costo del mantenimiento" />
-    </label>
-  } @else {
-    <label class="field">
-      <span class="field__label">Motivo de rechazo <span aria-hidden="true">*</span></span>
-      <textarea class="field__input field__textarea" formControlName="diagnostico" rows="3" aria-label="Motivo de rechazo"></textarea>
-      @if (form.controls.diagnostico.touched && form.controls.diagnostico.errors?.['required']) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
-  }
+  <label class="field">
+    <span class="field__label">Solución aplicada <span aria-hidden="true">*</span></span>
+    <textarea class="field__input field__textarea" formControlName="solucion" rows="3" aria-label="Solución"></textarea>
+    @if (form.controls.solucion.touched && form.controls.solucion.errors?.['required']) {
+      <span class="field__error" role="alert">Obligatorio.</span>
+    }
+  </label>
+
+  <label class="field">
+    <span class="field__label">Costo (opcional)</span>
+    <input class="field__input" type="number" min="0" step="0.01" formControlName="costo" aria-label="Costo del mantenimiento" />
+  </label>
 
   <div class="form__actions">
     <button class="btn btn--ghost" type="button" (click)="cancelled.emit()">Cancelar</button>
-    <button class="btn" [class.btn--danger]="mode() === 'rechazar'" type="submit" [disabled]="saving()">
-      {{ saving() ? 'Procesando…' : (mode() === 'completar' ? 'Completar' : 'Rechazar') }}
+    <button class="btn btn--success" type="submit" [disabled]="saving()">
+      {{ saving() ? 'Procesando…' : 'Completar' }}
     </button>
   </div>
 </form>

@@ -19,6 +19,7 @@
   display: flex; align-items: center; gap: 4px;
   list-style: none; margin: 0; padding: 0; flex: 1;
 }
+.navbar__item { position: relative; }
 .navbar__link {
   display: inline-block;
   padding: 8px 14px;
@@ -29,6 +30,44 @@
 }
 .navbar__link:hover { background: #3730a3; color: #fff; }
 .navbar__link--active { background: #3730a3; color: #fff; font-weight: 600; }
+
+.navbar__dropdown-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.navbar__dropdown-btn:hover,
+.navbar__item--open > .navbar__dropdown-btn { background: #3730a3; color: #fff; }
+.navbar__caret { font-size: 11px; }
+
+.navbar__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  z-index: 100;
+}
+.navbar__dropdown-link {
+  display: block;
+  padding: 10px 16px;
+  color: var(--color-ink, #0f172a);
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.navbar__dropdown-link:hover { background: var(--color-surface, #f1f5f9); }
+.navbar__dropdown-link--active { font-weight: 600; color: var(--color-primary, #4338ca); }
+
 .navbar__user { display: flex; align-items: center; gap: 14px; }
 .navbar__username { font-size: 14px; color: #e0e7ff; }
 .navbar__logout {

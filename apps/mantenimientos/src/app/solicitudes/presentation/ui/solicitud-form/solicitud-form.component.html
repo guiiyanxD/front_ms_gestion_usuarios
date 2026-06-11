@@ -2,26 +2,31 @@
   <h2 class="form__title">Nueva solicitud de mantenimiento</h2>
   <div class="form__grid">
 
-    <label class="field field--full">
+    <div class="field field--full asset-search">
       <span class="field__label">Activo fijo <span aria-hidden="true">*</span></span>
-      <select class="field__input" formControlName="fixedAssetId" aria-label="Activo fijo">
-        <option value="">— Selecciona un activo —</option>
-        @for (a of fixedAssets(); track a.id) {
-          <option [value]="a.id">{{ a.name }} — {{ a.location }}</option>
-        }
-      </select>
+      <input
+        class="field__input"
+        type="text"
+        placeholder="Buscar por código o nombre…"
+        aria-label="Buscar activo fijo"
+        [value]="assetSearch()"
+        (input)="onAssetInput($any($event.target).value)"
+        (focus)="showAssetDropdown.set(true)"
+        (blur)="onAssetBlur()"
+      />
+      @if (showAssetDropdown() && filteredAssets().length > 0) {
+        <ul class="asset-search__dropdown" role="listbox">
+          @for (a of filteredAssets(); track a.id) {
+            <li class="asset-search__option" role="option" (mousedown)="selectAsset(a)">
+              <span class="asset-search__codigo">{{ a.codigo }}</span> — {{ a.name }}
+            </li>
+          }
+        </ul>
+      }
       @if (form.controls.fixedAssetId.touched && form.controls.fixedAssetId.invalid) {
         <span class="field__error" role="alert">Obligatorio.</span>
       }
-    </label>
-
-    <label class="field field--full">
-      <span class="field__label">Título <span aria-hidden="true">*</span></span>
-      <input class="field__input" type="text" formControlName="title" aria-label="Título de la solicitud" />
-      @if (form.controls.title.touched && form.controls.title.invalid) {
-        <span class="field__error" role="alert">Obligatorio.</span>
-      }
-    </label>
+    </div>
 
     <label class="field">
       <span class="field__label">Tipo <span aria-hidden="true">*</span></span>

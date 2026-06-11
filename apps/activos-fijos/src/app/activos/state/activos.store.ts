@@ -81,7 +81,25 @@ export class ActivosStore {
     if (this._hasPrevious()) this.load((this._currentPage() - 2) * PAGE_SIZE);
   }
 
+  selectFromList(summary: ActivoSummary): void {
+    this._selected.set({
+      id: summary.id,
+      codigo: summary.codigo,
+      name: summary.name,
+      description: summary.description,
+      category: summary.category,
+      location: summary.location,
+      status: summary.status,
+      imageUrl: '',
+      acquisitionDate: summary.acquisitionDate,
+      areaName: summary.areaName,
+      categoryName: summary.categoryName,
+      user: null,
+    });
+  }
+
   loadOne(id: string): void {
+    if (this._selected()?.id === id) return;
     this._status.set('loading');
     this._error.set(null);
     this._selected.set(null);

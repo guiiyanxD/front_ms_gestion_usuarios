@@ -1,21 +1,15 @@
-import { Observable, forkJoin, map } from 'rxjs';
-import { MaintenanceRepository } from '../repositories/maintenance.repository';
+import { Observable } from 'rxjs';
 import { MaintenanceRequestRepository } from '../../../solicitudes/domain/repositories/maintenance-request.repository';
-import { CreateMaintenanceInput } from '../models/maintenance.model';
 
 export class TomarResponsabilidadUseCase {
   constructor(
-    private readonly maintenanceRepo: MaintenanceRepository,
     private readonly requestRepo: MaintenanceRequestRepository,
   ) {}
 
-  execute(input: CreateMaintenanceInput): Observable<void> {
-    const create$ = this.maintenanceRepo.create(input);
-    const approve$ = this.requestRepo.updateStatus(input.maintenanceRequestId, {
+  execute(requestId: string, technicianId: string): Observable<void> {
+    return this.requestRepo.updateStatus(requestId, {
       newStatus: 'APPROVED',
-      technicianId: input.userId,
-      diagnostico: input.description,
+      technicianId,
     });
-    return forkJoin([create$, approve$]).pipe(map(() => undefined));
   }
 }

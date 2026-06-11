@@ -20,22 +20,65 @@
       (submitted)="onSolicitudSubmit($event)"
       (cancelled)="onCancel()"
     />
-  } @else if (activeModal() === 'tomar') {
-    <app-tomar-form
-      [saving]="mantStore.isSaving()"
-      [maintenanceRequestId]="selectedRequest()!.id"
-      [userId]="session.userId"
-      (submitted)="onTomarSubmit($event)"
+  } @else if (activeModal() === 'diagnostico') {
+    <app-diagnostico-form
+      [saving]="isSaving()"
+      [initialValue]="selectedRequest()?.diagnostico ?? null"
+      (submitted)="onDiagnosticoSubmit($event)"
       (cancelled)="onCancel()"
     />
-  } @else if (activeModal() === 'completar' || activeModal() === 'rechazar') {
+  } @else if (activeModal() === 'completar') {
     <app-completar-rechazar-form
       [saving]="isSaving()"
-      [mode]="activeModal() === 'completar' ? 'completar' : 'rechazar'"
       (submitted)="onCerrarSubmit($event)"
       (cancelled)="onCancel()"
     />
   } @else {
+    <div class="page__filters">
+      <input
+        class="filter__search"
+        type="search"
+        placeholder="Buscar por código…"
+        [value]="searchCodigo()"
+        (input)="onSearchInput($any($event.target).value)"
+        (search)="onSearchInput($any($event.target).value)"
+        aria-label="Buscar por código"
+      />
+
+      <select
+        class="filter__select"
+        [value]="filterPrioridad()"
+        (change)="filterPrioridad.set($any($event.target).value); onFilterChange()"
+        aria-label="Filtrar por prioridad"
+      >
+        <option value="">Todas las prioridades</option>
+        <option value="BAJA">Baja</option>
+        <option value="MEDIA">Media</option>
+        <option value="ALTA">Alta</option>
+        <option value="CRITICA">Crítica</option>
+      </select>
+
+      @if (!session.isTecnico()) {
+        <select
+          class="filter__select"
+          [value]="filterStatus()"
+          (change)="filterStatus.set($any($event.target).value); onFilterChange()"
+          aria-label="Filtrar por estado"
+        >
+          <option value="">Todos los estados</option>
+          <option value="PENDING">Pendiente</option>
+          <option value="APPROVED">En proceso</option>
+          <option value="COMPLETED">Completada</option>
+        </select>
+      }
+
+      @if (searchCodigo() || filterPrioridad() || filterStatus()) {
+        <button class="btn btn--ghost filter__clear" type="button" (click)="onClearFilters()">
+          Limpiar
+        </button>
+      }
+    </div>
+
     @if (status() === 'loading') {
       <p class="page__msg">Cargando solicitudes…</p>
     } @else {
@@ -43,16 +86,16 @@
         @for (r of requests(); track r.id) {
           <app-solicitud-card
             [request]="r"
-            [showTomar]="session.isTecnico()"
+            [showTomar]="session.isTecnico() || session.isAdmin()"
+            [showDiagnosticar]="session.isTecnico() || session.isAdmin()"
             [showCerrar]="session.isTecnico() || session.isAdmin()"
             (view)="onView($event)"
             (tomar)="onTomar($event)"
+            (diagnosticar)="onDiagnosticar($event)"
             (completar)="onCompletar($event)"
-            (rechazar)="onRechazar($event)"
-            (remove)="onDelete($event)"
           />
         } @empty {
-          <p class="page__empty">No hay solicitudes.</p>
+          <p class="page__empty">No hay solicitudes que coincidan con los filtros.</p>
         }
       </section>
 

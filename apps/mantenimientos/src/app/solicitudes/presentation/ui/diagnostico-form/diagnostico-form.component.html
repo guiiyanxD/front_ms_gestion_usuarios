@@ -1,0 +1,23 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <h3 class="form__title">Diagnóstico</h3>
+
+  <label class="field">
+    <span class="field__label">Descripción del diagnóstico <span aria-hidden="true">*</span></span>
+    <textarea
+      class="field__input field__textarea"
+      formControlName="diagnostico"
+      rows="4"
+      aria-label="Diagnóstico"
+    ></textarea>
+    @if (form.controls.diagnostico.touched && form.controls.diagnostico.errors?.['required']) {
+      <span class="field__error" role="alert">Obligatorio.</span>
+    }
+  </label>
+
+  <div class="form__actions">
+    <button class="btn btn--ghost" type="button" (click)="cancelled.emit()">Cancelar</button>
+    <button class="btn" type="submit" [disabled]="saving()">
+      {{ saving() ? 'Guardando…' : 'Guardar diagnóstico' }}
+    </button>
+  </div>
+</form>

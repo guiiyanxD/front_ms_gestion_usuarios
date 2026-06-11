@@ -61,63 +61,19 @@
       </label>
 
       <label class="field">
-        <span class="field__label">Código <span aria-hidden="true">*</span></span>
-        <input class="field__input" type="text" formControlName="codigo" aria-label="Código del activo" />
-        @if (form.controls.codigo.touched && form.controls.codigo.invalid) {
-          <span class="field__error" role="alert">Obligatorio.</span>
-        }
-      </label>
-
-      <label class="field">
-        <span class="field__label">Marca <span aria-hidden="true">*</span></span>
+        <span class="field__label">Marca</span>
         <input class="field__input" type="text" formControlName="marca" aria-label="Marca del activo" />
-        @if (form.controls.marca.touched && form.controls.marca.invalid) {
-          <span class="field__error" role="alert">Obligatorio.</span>
-        }
       </label>
 
       <label class="field">
-        <span class="field__label">Modelo <span aria-hidden="true">*</span></span>
+        <span class="field__label">Modelo</span>
         <input class="field__input" type="text" formControlName="modelo" aria-label="Modelo del activo" />
-        @if (form.controls.modelo.touched && form.controls.modelo.invalid) {
-          <span class="field__error" role="alert">Obligatorio.</span>
-        }
-      </label>
-
-      <label class="field">
-        <span class="field__label">Número de serie</span>
-        <input class="field__input" type="text" formControlName="numeroSerie" aria-label="Número de serie del activo" />
       </label>
 
       <label class="field">
         <span class="field__label">Valor de adquisición</span>
         <input class="field__input" type="number" min="0" formControlName="valorAdquisicion" aria-label="Valor de adquisición del activo" />
       </label>
-
-      <div class="field field--full">
-        <span class="field__label">Etiquetas</span>
-        <div class="tag-input">
-          <input
-            class="field__input tag-input__field"
-            type="text"
-            [formControl]="tagInput"
-            placeholder="Escribe una etiqueta y pulsa Agregar"
-            aria-label="Nueva etiqueta"
-            (keydown)="onTagKeydown($event)"
-          />
-          <button class="btn btn--ghost tag-input__btn" type="button" (click)="addTag()">Agregar</button>
-        </div>
-        @if (tags().length) {
-          <div class="tag-list" role="list" aria-label="Etiquetas añadidas">
-            @for (tag of tags(); track tag) {
-              <span class="tag" role="listitem">
-                {{ tag }}
-                <button class="tag__remove" type="button" (click)="removeTag(tag)" [attr.aria-label]="'Eliminar etiqueta ' + tag">x</button>
-              </span>
-            }
-          </div>
-        }
-      </div>
     }
 
     <label class="field field--full">

@@ -4,8 +4,7 @@ import { MaintenanceRequest, MaintenanceRequestStatus } from '../../../domain/mo
 
 const STATUS_LABELS: Record<MaintenanceRequestStatus, string> = {
   PENDING: 'Pendiente',
-  APPROVED: 'Aprobada',
-  REJECTED: 'Rechazada',
+  APPROVED: 'En proceso',
   COMPLETED: 'Completada',
 };
 
@@ -21,11 +20,11 @@ export class SolicitudCardComponent {
   readonly request = input.required<MaintenanceRequest>();
   readonly showTomar = input<boolean>(false);
   readonly showCerrar = input<boolean>(false);
+  readonly showDiagnosticar = input<boolean>(false);
   readonly view = output<MaintenanceRequest>();
   readonly tomar = output<MaintenanceRequest>();
+  readonly diagnosticar = output<MaintenanceRequest>();
   readonly completar = output<MaintenanceRequest>();
-  readonly rechazar = output<MaintenanceRequest>();
-  readonly remove = output<MaintenanceRequest>();
 
   readonly statusLabels = STATUS_LABELS;
 }

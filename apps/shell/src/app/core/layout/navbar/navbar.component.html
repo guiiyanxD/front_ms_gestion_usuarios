@@ -5,15 +5,44 @@
   </div>
 
   <ul class="navbar__menu">
-    @for (item of visibleItems(); track item.path) {
-      <li>
-        <a
-          class="navbar__link"
-          [routerLink]="item.path"
-          routerLinkActive="navbar__link--active"
-        >
-          {{ item.label }}
-        </a>
+    @for (item of visibleItems(); track item.label) {
+      <li class="navbar__item" [class.navbar__item--open]="openDropdown() === item.label">
+        @if (item.children) {
+          <button
+            class="navbar__link navbar__dropdown-btn"
+            type="button"
+            [attr.aria-expanded]="openDropdown() === item.label"
+            (click)="toggleDropdown(item.label)"
+          >
+            {{ item.label }} <span class="navbar__caret" aria-hidden="true">▾</span>
+          </button>
+          @if (openDropdown() === item.label) {
+            <ul class="navbar__dropdown" role="menu">
+              @for (child of item.children; track child.path) {
+                <li role="none">
+                  <a
+                    class="navbar__dropdown-link"
+                    role="menuitem"
+                    [routerLink]="child.path"
+                    routerLinkActive="navbar__dropdown-link--active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="closeDropdown()"
+                  >
+                    {{ child.label }}
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        } @else {
+          <a
+            class="navbar__link"
+            [routerLink]="item.path"
+            routerLinkActive="navbar__link--active"
+          >
+            {{ item.label }}
+          </a>
+        }
       </li>
     }
   </ul>

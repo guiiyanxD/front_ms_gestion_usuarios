@@ -9,6 +9,7 @@ export interface AssignedUser {
 
 export interface Activo {
   readonly id: string;
+  readonly codigo: string;
   readonly name: string;
   readonly description: string;
   readonly category: ActivoCategory;
@@ -16,15 +17,22 @@ export interface Activo {
   readonly status: ActivoStatus;
   readonly imageUrl: string;
   readonly acquisitionDate: string;
+  readonly areaName: string;
+  readonly categoryName: string;
   readonly user: AssignedUser | null;
 }
 
 export interface ActivoSummary {
   readonly id: string;
+  readonly codigo: string;
   readonly name: string;
+  readonly description: string;
   readonly category: ActivoCategory;
   readonly status: ActivoStatus;
   readonly location: string;
+  readonly areaName: string;
+  readonly acquisitionDate: string;
+  readonly categoryName: string;
 }
 
 export interface PaginatedActivosResult {
@@ -50,12 +58,6 @@ export interface CreateActivoInput {
   readonly imageUrl: string;
   readonly acquisitionDate: string;
   readonly userId?: string;
-  readonly codigo: string;
-  readonly marca: string;
-  readonly modelo: string;
-  readonly numeroSerie?: string;
-  readonly valorAdquisicion?: number;
-  readonly tags?: string[];
 }
 
 export interface UpdateActivoInput {

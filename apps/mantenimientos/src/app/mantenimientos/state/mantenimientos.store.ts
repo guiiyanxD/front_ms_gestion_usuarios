@@ -4,7 +4,7 @@ import { ListMaintenancesByRequestUseCase } from '../domain/use-cases/list-by-re
 import { TomarResponsabilidadUseCase } from '../domain/use-cases/tomar-responsabilidad.use-case';
 import { DeleteMaintenanceUseCase } from '../domain/use-cases/delete-maintenance.use-case';
 import { UpdateMaintenanceUseCase } from '../domain/use-cases/update-maintenance.use-case';
-import { Maintenance, CreateMaintenanceInput, UpdateMaintenanceInput } from '../domain/models/maintenance.model';
+import { Maintenance, UpdateMaintenanceInput } from '../domain/models/maintenance.model';
 import { UserOption } from '../../shared/user-option/user-option.model';
 import { ListUserOptionsUseCase } from '../../shared/user-option/list-user-options.use-case';
 
@@ -49,10 +49,10 @@ export class MantenimientosStore {
     });
   }
 
-  tomar(input: CreateMaintenanceInput, onSuccess: () => void): void {
+  tomar(requestId: string, technicianId: string, onSuccess: () => void): void {
     this._status.set('saving');
     this._error.set(null);
-    this.tomarUC.execute(input).subscribe({
+    this.tomarUC.execute(requestId, technicianId).subscribe({
       next: () => onSuccess(),
       error: () => { this._status.set('error'); this._error.set('No se pudo tomar la solicitud.'); },
     });

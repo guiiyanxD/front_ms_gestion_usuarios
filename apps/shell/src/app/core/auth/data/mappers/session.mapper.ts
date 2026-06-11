@@ -11,7 +11,7 @@ function decodeJwt(token: string): JwtPayload {
   return JSON.parse(atob(token.split('.')[1]));
 }
 
-export function toSession(dto: LoginResponseDto): Session {
+export function toSession(dto: LoginResponseDto, restUserId: string | null = null): Session {
   const { id, token, firstName, lastName, email } = dto.login;
   const { role, exp } = decodeJwt(token);
   return {
@@ -23,6 +23,7 @@ export function toSession(dto: LoginResponseDto): Session {
       fullName: `${firstName} ${lastName}`,
       roles: [role],
       permissions: [],
+      restUserId,
     },
   };
 }

@@ -19,8 +19,8 @@ export function provideMantenimientos(): Provider[] {
     { provide: ListMaintenancesByRequestUseCase, useFactory: (r: MaintenanceRepository) => new ListMaintenancesByRequestUseCase(r), deps: [MaintenanceRepository] },
     {
       provide: TomarResponsabilidadUseCase,
-      useFactory: (mr: MaintenanceRepository, rr: MaintenanceRequestRepository) => new TomarResponsabilidadUseCase(mr, rr),
-      deps: [MaintenanceRepository, MaintenanceRequestRepository],
+      useFactory: (rr: MaintenanceRequestRepository) => new TomarResponsabilidadUseCase(rr),
+      deps: [MaintenanceRequestRepository],
     },
     { provide: DeleteMaintenanceUseCase, useFactory: (r: MaintenanceRepository) => new DeleteMaintenanceUseCase(r), deps: [MaintenanceRepository] },
     { provide: UpdateMaintenanceUseCase, useFactory: (r: MaintenanceRepository) => new UpdateMaintenanceUseCase(r), deps: [MaintenanceRepository] },

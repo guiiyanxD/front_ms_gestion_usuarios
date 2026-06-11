@@ -6,6 +6,7 @@ interface StoredUser {
   id: string;
   username: string;
   roles: string[];
+  restUserId: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -19,6 +20,7 @@ export class SessionService {
   get userId(): string { return this.storedUser?.id ?? ''; }
   get username(): string { return this.storedUser?.username ?? ''; }
   get roles(): string[] { return this.storedUser?.roles ?? []; }
+  get restUserId(): string | null { return this.storedUser?.restUserId ?? null; }
 
   isTecnico(): boolean { return this.roles.includes('TECNICO'); }
   isAdmin(): boolean {

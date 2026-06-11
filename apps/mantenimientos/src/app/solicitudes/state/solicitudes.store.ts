@@ -2,11 +2,15 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { ListRequestsUseCase } from '../domain/use-cases/list-requests.use-case';
 import { ListRequestsByStatusUseCase } from '../domain/use-cases/list-requests-by-status.use-case';
 import { ListMyRequestsUseCase } from '../domain/use-cases/list-my-requests.use-case';
+import { ListRequestsByTechnicianUseCase } from '../domain/use-cases/list-requests-by-technician.use-case';
 import { GetRequestUseCase } from '../domain/use-cases/get-request.use-case';
 import { CreateRequestUseCase } from '../domain/use-cases/create-request.use-case';
 import { UpdateStatusUseCase } from '../domain/use-cases/update-status.use-case';
+import { UpdateDiagnosticoUseCase } from '../domain/use-cases/update-diagnostico.use-case';
 import { DeleteRequestUseCase } from '../domain/use-cases/delete-request.use-case';
-import { MaintenanceRequest, PaginatedRequestsResult, CreateMaintenanceRequestInput, UpdateStatusInput } from '../domain/models/maintenance-request.model';
+import { MaintenanceRequest, PaginatedRequestsResult, CreateMaintenanceRequestInput, UpdateStatusInput, ListRequestsFilters } from '../domain/models/maintenance-request.model';
+
+type SearchFilters = Pick<ListRequestsFilters, 'codigo' | 'prioridad' | 'status'>;
 import { FixedAssetOption } from '../../shared/fixed-asset-option/fixed-asset-option.model';
 import { AreaOption } from '../../shared/area-option/area-option.model';
 import { ListFixedAssetOptionsUseCase } from '../../shared/fixed-asset-option/list-fixed-asset-options.use-case';
@@ -20,9 +24,11 @@ export class SolicitudesStore {
   private readonly listUC = inject(ListRequestsUseCase);
   private readonly listByStatusUC = inject(ListRequestsByStatusUseCase);
   private readonly listMyUC = inject(ListMyRequestsUseCase);
+  private readonly listByTechnicianUC = inject(ListRequestsByTechnicianUseCase);
   private readonly getUC = inject(GetRequestUseCase);
   private readonly createUC = inject(CreateRequestUseCase);
   private readonly updateStatusUC = inject(UpdateStatusUseCase);
+  private readonly updateDiagnosticoUC = inject(UpdateDiagnosticoUseCase);
   private readonly deleteUC = inject(DeleteRequestUseCase);
   private readonly listAssetsUC = inject(ListFixedAssetOptionsUseCase);
   private readonly listAreasUC = inject(ListAreaOptionsUseCase);
@@ -63,37 +69,53 @@ export class SolicitudesStore {
     this._status.set('idle');
   }
 
-  loadAll(offset = 0): void {
+  loadAll(offset = 0, search: SearchFilters = {}): void {
     this._status.set('loading');
     this._error.set(null);
-    this.listUC.execute({ offset, limit: PAGE_SIZE }).subscribe({
+    this.listUC.execute({ offset, limit: PAGE_SIZE, ...search }).subscribe({
       next: (r) => this.setPage(r),
       error: () => { this._status.set('error'); this._error.set('No se pudieron cargar las solicitudes.'); },
     });
   }
 
-  loadPending(offset = 0): void {
+  loadPending(offset = 0, search: SearchFilters = {}): void {
     this._status.set('loading');
     this._error.set(null);
-    this.listByStatusUC.execute('PENDING', { offset, limit: PAGE_SIZE }).subscribe({
+    this.listByStatusUC.execute('PENDING', { offset, limit: PAGE_SIZE, ...search }).subscribe({
       next: (r) => this.setPage(r),
       error: () => { this._status.set('error'); this._error.set('No se pudieron cargar las solicitudes pendientes.'); },
     });
   }
 
-  loadMine(createdBy: string, offset = 0): void {
+  loadByTechnician(tecnicoId: string, offset = 0, search: SearchFilters = {}): void {
     this._status.set('loading');
     this._error.set(null);
-    this.listMyUC.execute(createdBy, { offset, limit: PAGE_SIZE }).subscribe({
+    this.listByTechnicianUC.execute(tecnicoId, { offset, limit: PAGE_SIZE, ...search }).subscribe({
+      next: (r) => this.setPage(r),
+      error: () => { this._status.set('error'); this._error.set('No se pudieron cargar tus solicitudes atendidas.'); },
+    });
+  }
+
+  loadMine(createdBy: string, offset = 0, search: SearchFilters = {}): void {
+    this._status.set('loading');
+    this._error.set(null);
+    this.listMyUC.execute(createdBy, { offset, limit: PAGE_SIZE, ...search }).subscribe({
       next: (r) => this.setPage(r),
       error: () => { this._status.set('error'); this._error.set('No se pudieron cargar tus solicitudes.'); },
     });
   }
 
+  selectFromList(request: MaintenanceRequest): void {
+    this._selected.set(request);
+  }
+
   loadOne(id: string): void {
-    this._status.set('loading');
+    // si no hay datos pre-cargados para este id, mostrar spinner mientras carga
+    if (!this._selected() || this._selected()?.id !== id) {
+      this._status.set('loading');
+      this._selected.set(null);
+    }
     this._error.set(null);
-    this._selected.set(null);
     this.getUC.execute(id).subscribe({
       next: (r) => { this._selected.set(r); this._status.set('idle'); },
       error: () => { this._status.set('error'); this._error.set('No se pudo cargar la solicitud.'); },
@@ -115,6 +137,15 @@ export class SolicitudesStore {
     this.updateStatusUC.execute(id, input).subscribe({
       next: () => reloadFn(),
       error: () => { this._status.set('error'); this._error.set('No se pudo actualizar el estado.'); },
+    });
+  }
+
+  updateDiagnostico(id: string, diagnostico: string, reloadFn: () => void): void {
+    this._status.set('saving');
+    this._error.set(null);
+    this.updateDiagnosticoUC.execute(id, diagnostico).subscribe({
+      next: () => reloadFn(),
+      error: () => { this._status.set('error'); this._error.set('No se pudo guardar el diagnóstico.'); },
     });
   }
 

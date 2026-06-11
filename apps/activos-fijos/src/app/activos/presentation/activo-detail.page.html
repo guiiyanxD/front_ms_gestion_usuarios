@@ -28,18 +28,26 @@
 
         <dl class="detail__dl">
           <div class="detail__row">
+            <dt class="detail__dt">Código</dt>
+            <dd class="detail__dd">{{ a.codigo }}</dd>
+          </div>
+          <div class="detail__row">
             <dt class="detail__dt">Categoría</dt>
-            <dd class="detail__dd">{{ categoryLabels[a.category] }}</dd>
+            <dd class="detail__dd">{{ a.categoryName || categoryLabels[a.category] }}</dd>
           </div>
           <div class="detail__row">
             <dt class="detail__dt">Ubicación</dt>
             <dd class="detail__dd">{{ a.location }}</dd>
           </div>
           <div class="detail__row">
-            <dt class="detail__dt">Fecha de adquisición</dt>
-            <dd class="detail__dd">{{ a.acquisitionDate }}</dd>
+            <dt class="detail__dt">Área</dt>
+            <dd class="detail__dd">{{ a.areaName }}</dd>
           </div>
           <div class="detail__row">
+            <dt class="detail__dt">Fecha de adquisición</dt>
+            <dd class="detail__dd">{{ a.acquisitionDate | date:'dd/MM/yyyy' }}</dd>
+          </div>
+          <!-- <div class="detail__row">
             <dt class="detail__dt">Usuario asignado</dt>
             <dd class="detail__dd">
               @if (a.user) {
@@ -48,39 +56,9 @@
                 Sin asignar
               }
             </dd>
-          </div>
+          </div> -->
         </dl>
 
-        <div class="detail__assign">
-          @if (!showAssignForm()) {
-            <button class="btn btn--ghost" type="button" (click)="showAssignForm.set(true)">
-              Asignar usuario
-            </button>
-          } @else {
-            <form class="assign-form" [formGroup]="assignForm" (ngSubmit)="onAssign()" novalidate>
-              <label class="field">
-                <span class="field__label">Usuario <span aria-hidden="true">*</span></span>
-                <select class="field__input" formControlName="userId" aria-label="Usuario a asignar">
-                  <option value="">— Selecciona un usuario —</option>
-                  @for (u of userOptions(); track u.id) {
-                    <option [value]="u.id">{{ u.firstName }} {{ u.lastName }} — {{ u.email }}</option>
-                  }
-                </select>
-                @if (assignForm.controls.userId.touched && assignForm.controls.userId.invalid) {
-                  <span class="field__error" role="alert">Obligatorio.</span>
-                }
-              </label>
-              <div class="assign-form__actions">
-                <button class="btn btn--ghost" type="button" (click)="showAssignForm.set(false); assignForm.reset()">
-                  Cancelar
-                </button>
-                <button class="btn" type="submit" [disabled]="status() === 'saving'">
-                  {{ status() === 'saving' ? 'Asignando…' : 'Asignar' }}
-                </button>
-              </div>
-            </form>
-          }
-        </div>
       </div>
     </article>
   }

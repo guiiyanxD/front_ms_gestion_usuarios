@@ -8,78 +8,142 @@
   } @else {
     @let s = solicitud()!;
     <article class="detail__card">
+
       <header class="detail__header">
         <div>
-          <h1 class="detail__title">{{ s.title }}</h1>
-          <p class="detail__meta">Creado por {{ s.createdBy }} · {{ s.createdAt | slice:0:10 }}</p>
+          <h1 class="detail__title">{{ s.codigo }}</h1>
+          <p class="detail__meta">Solicitado el {{ s.fechaSolicitud | date:'dd/MM/yyyy HH:mm' }}</p>
         </div>
         <span class="badge badge--{{ s.status }}">{{ statusLabels[s.status] }}</span>
       </header>
 
-      <p class="detail__desc">{{ s.description }}</p>
+      <div class="detail__tags">
+        <span class="tag">{{ s.tipo }}</span>
+        <span class="tag tag--prioridad tag--{{ s.prioridad }}">{{ s.prioridad }}</span>
+      </div>
 
-      <dl class="detail__dl">
-        <div class="detail__row">
-          <dt class="detail__dt">Activo</dt>
-          <dd class="detail__dd">{{ s.fixedAsset.name }} — {{ s.fixedAsset.location }}</dd>
-        </div>
-        <div class="detail__row">
-          <dt class="detail__dt">Categoría</dt>
-          <dd class="detail__dd">{{ s.fixedAsset.category }}</dd>
-        </div>
-      </dl>
+      <p class="detail__desc">{{ s.descripcion }}</p>
 
-      @if (s.statusChangeLog.length) {
-        <section class="detail__log">
-          <h2 class="detail__log-title">Historial de estados</h2>
-          <ul class="log-list">
-            @for (entry of s.statusChangeLog; track $index) {
-              <li class="log-item">{{ entry.fromStatus }} → {{ entry.toStatus }}</li>
+      <section class="detail__section">
+        <h2 class="detail__section-title">Activo</h2>
+        <dl class="detail__dl">
+          <div class="detail__row">
+            <dt class="detail__dt">Código</dt>
+            <dd class="detail__dd">{{ s.activoCodigo }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Nombre</dt>
+            <dd class="detail__dd">{{ s.activoNombre }}</dd>
+          </div>
+          <div class="detail__row">
+            <dt class="detail__dt">Área</dt>
+            <dd class="detail__dd">{{ s.areaNombre }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="detail__section">
+        <h2 class="detail__section-title">Personas</h2>
+        <dl class="detail__dl">
+          <div class="detail__row">
+            <dt class="detail__dt">Solicitante</dt>
+            <dd class="detail__dd">{{ s.solicitanteNombre }}</dd>
+          </div>
+          @if (s.tecnicoNombre) {
+            <div class="detail__row">
+              <dt class="detail__dt">Técnico</dt>
+              <dd class="detail__dd">{{ s.tecnicoNombre }}</dd>
+            </div>
+          }
+        </dl>
+      </section>
+
+      <section class="detail__section">
+        <h2 class="detail__section-title">Fechas</h2>
+        <dl class="detail__dl">
+          <div class="detail__row">
+            <dt class="detail__dt">Solicitud</dt>
+            <dd class="detail__dd">{{ s.fechaSolicitud | date:'dd/MM/yyyy HH:mm' }}</dd>
+          </div>
+          @if (s.fechaInicio) {
+            <div class="detail__row">
+              <dt class="detail__dt">Inicio</dt>
+              <dd class="detail__dd">{{ s.fechaInicio | date:'dd/MM/yyyy HH:mm' }}</dd>
+            </div>
+          }
+          @if (s.fechaEstimadaFin) {
+            <div class="detail__row">
+              <dt class="detail__dt">Est. fin</dt>
+              <dd class="detail__dd">{{ s.fechaEstimadaFin | date:'dd/MM/yyyy' }}</dd>
+            </div>
+          }
+          @if (s.fechaFin) {
+            <div class="detail__row">
+              <dt class="detail__dt">Fin real</dt>
+              <dd class="detail__dd">{{ s.fechaFin | date:'dd/MM/yyyy HH:mm' }}</dd>
+            </div>
+          }
+        </dl>
+      </section>
+
+      <section class="detail__section">
+        <h2 class="detail__section-title">Diagnóstico</h2>
+        @if (s.diagnostico) {
+          <p class="detail__diagnostico">{{ s.diagnostico }}</p>
+        } @else {
+          <p class="detail__empty-hint">Sin diagnóstico aún.</p>
+        }
+      </section>
+
+      @if (s.solucion || s.costo !== '0.00') {
+        <section class="detail__section">
+          <h2 class="detail__section-title">Resolución</h2>
+          <dl class="detail__dl">
+            @if (s.solucion) {
+              <div class="detail__row">
+                <dt class="detail__dt">Solución</dt>
+                <dd class="detail__dd">{{ s.solucion }}</dd>
+              </div>
             }
-          </ul>
+            @if (s.costo !== '0.00') {
+              <div class="detail__row">
+                <dt class="detail__dt">Costo</dt>
+                <dd class="detail__dd">$ {{ s.costo }}</dd>
+              </div>
+            }
+          </dl>
         </section>
       }
 
       <div class="detail__actions">
-        @if (session.isTecnico() && s.status === 'PENDING') {
-          <button class="btn" type="button" (click)="activeModal.set('tomar')">Tomar responsabilidad</button>
+        @if ((session.isTecnico() || session.isAdmin()) && s.status === 'PENDING') {
+          <button class="btn" type="button" [disabled]="status() === 'saving'" (click)="onTomar()">
+            {{ status() === 'saving' ? 'Procesando…' : 'Tomar responsabilidad' }}
+          </button>
+        }
+        @if ((session.isTecnico() || session.isAdmin()) && s.status === 'APPROVED' && !s.diagnostico) {
+          <button class="btn" type="button" (click)="activeModal.set('diagnostico')">Diagnosticar</button>
         }
         @if ((session.isTecnico() || session.isAdmin()) && s.status === 'APPROVED') {
           <button class="btn btn--success" type="button" (click)="activeModal.set('completar')">Completar</button>
-          <button class="btn btn--danger" type="button" (click)="activeModal.set('rechazar')">Rechazar</button>
         }
       </div>
 
-      @if (activeModal() === 'tomar') {
-        <app-tomar-form
-          [saving]="mantStore.isSaving()"
-          [maintenanceRequestId]="s.id"
-          [userId]="session.userId"
-          (submitted)="onTomarSubmit($event)"
+      @if (activeModal() === 'diagnostico') {
+        <app-diagnostico-form
+          [saving]="status() === 'saving'"
+          [initialValue]="solicitud()?.diagnostico ?? null"
+          (submitted)="onDiagnosticoSubmit($event)"
           (cancelled)="onCancel()"
         />
-      } @else if (activeModal() === 'completar' || activeModal() === 'rechazar') {
+      } @else if (activeModal() === 'completar') {
         <app-completar-rechazar-form
           [saving]="status() === 'saving'"
-          [mode]="activeModal() === 'completar' ? 'completar' : 'rechazar'"
           (submitted)="onCerrarSubmit($event)"
           (cancelled)="onCancel()"
         />
       }
-    </article>
 
-    @if (maintenances().length) {
-      <section class="detail__maintenances">
-        <h2 class="detail__section-title">Mantenimientos registrados</h2>
-        <ul class="maint-list">
-          @for (m of maintenances(); track m.id) {
-            <li class="maint-item">
-              <span class="maint-type maint-type--{{ m.type }}">{{ m.type === 'CORRECTIVE' ? 'Correctivo' : 'Preventivo' }}</span>
-              <span class="maint-desc">{{ m.description }}</span>
-            </li>
-          }
-        </ul>
-      </section>
-    }
+    </article>
   }
 </main>
