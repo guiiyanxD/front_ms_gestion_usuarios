@@ -1,0 +1,69 @@
+.page {
+  padding: 32px 24px;
+  font-family: var(--font, system-ui, sans-serif);
+  max-width: 1100px;
+}
+.page__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.page__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-ink, #0f172a);
+  margin: 0 0 4px;
+}
+.page__subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+.page__count {
+  font-size: 13px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.page__alert {
+  background: #fef2f2;
+  color: #dc2626;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.page__msg {
+  color: #64748b;
+  font-size: 14px;
+}
+.page__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+.page__page-info {
+  font-size: 14px;
+  color: #64748b;
+}
+.btn {
+  height: 38px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--color-ink, #0f172a);
+  border: 1px solid #cbd5e1;
+}
+.btn--ghost:hover:not(:disabled) { background: #f1f5f9; }
+.btn--ghost:disabled { opacity: .4; cursor: not-allowed; }

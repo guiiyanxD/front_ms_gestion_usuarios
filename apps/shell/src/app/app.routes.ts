@@ -5,10 +5,15 @@ import { roleGuard } from './core/auth/guards/role.guard';
 
 export const appRoutes: Routes = [
   {
-    path: 'reportes',
+    path: 'actividades',
     canActivate: [authGuard, roleGuard(['SUPERADMIN', 'GERENTE'])],
     loadChildren: () =>
-      import('reportes/Routes').then((m) => m.remoteRoutes),
+      import('actividades/Routes').then((m) => m.remoteRoutes),
+  },
+  {
+    path: 'reportes',
+    canActivate: [authGuard, roleGuard(['SUPERADMIN', 'GERENTE'])],
+    loadChildren: () => import('reportes/Routes').then((m) => m.remoteRoutes),
   },
   {
     path: 'users',

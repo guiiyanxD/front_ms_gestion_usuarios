@@ -29,6 +29,9 @@
       ],
       "reportes/Routes": [
         "./apps/reportes/src/app/remote-entry/entry.routes.ts"
+      ],
+      "actividades/Routes": [
+        "./apps/actividades/src/app/remote-entry/entry.routes.ts"
       ]
     }
   },

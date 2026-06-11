@@ -57,6 +57,7 @@ export class NavbarComponent {
         { label: 'Reportes', path: '/reportes' },
       ],
     },
+    { label: 'Actividades', path: '/actividades', roles: ['SUPERADMIN', 'GERENTE'] },
   ];
 
   readonly visibleItems = computed(() => {

@@ -1,0 +1,45 @@
+<main class="page">
+  <header class="page__head">
+    <div>
+      <h1 class="page__title">Actividades del sistema</h1>
+      <p class="page__subtitle">Registro de todas las acciones realizadas en el sistema.</p>
+    </div>
+    @if (status() !== 'loading') {
+      <span class="page__count">{{ totalElements() }} actividades</span>
+    }
+  </header>
+
+  @if (status() === 'error') {
+    <p class="page__alert" role="alert">{{ error() }}</p>
+  }
+
+  @if (status() === 'loading') {
+    <p class="page__msg">Cargando actividades…</p>
+  } @else {
+    <app-actividad-table [actividades]="actividades()" />
+
+    @if (totalPages() > 1) {
+      <div class="page__pagination">
+        <button
+          class="btn btn--ghost"
+          type="button"
+          [disabled]="!hasPrevious()"
+          (click)="onPrevPage()"
+        >
+          ← Anterior
+        </button>
+        <span class="page__page-info">
+          Página {{ currentPage() }} de {{ totalPages() }}
+        </span>
+        <button
+          class="btn btn--ghost"
+          type="button"
+          [disabled]="!hasNext()"
+          (click)="onNextPage()"
+        >
+          Siguiente →
+        </button>
+      </div>
+    }
+  }
+</main>

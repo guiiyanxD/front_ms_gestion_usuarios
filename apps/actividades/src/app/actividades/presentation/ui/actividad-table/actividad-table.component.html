@@ -1,0 +1,28 @@
+<div class="table-wrap">
+  <table class="table" aria-label="Actividades del sistema">
+    <thead>
+      <tr>
+        <th class="table__th">Acción</th>
+        <th class="table__th">Descripción</th>
+        <th class="table__th">Creado por</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (a of actividades(); track a.id) {
+        <tr class="table__row">
+          <td class="table__td">
+            <span class="table__badge">{{ a.actionName }}</span>
+          </td>
+          <td class="table__td table__td--desc">{{ a.description }}</td>
+          <td class="table__td">
+            <span class="table__actor">{{ a.createdBy }}</span>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td class="table__empty" colspan="3">No hay actividades registradas.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
