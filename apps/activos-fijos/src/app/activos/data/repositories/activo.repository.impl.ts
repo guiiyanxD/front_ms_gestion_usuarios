@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { forkJoin, Observable, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Apollo, gql } from 'apollo-angular';
 import { ActivoRepository } from '../../domain/repositories/activo.repository';
