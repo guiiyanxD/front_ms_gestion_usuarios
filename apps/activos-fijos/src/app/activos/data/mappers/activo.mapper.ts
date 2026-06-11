@@ -4,6 +4,7 @@ import { Activo, ActivoSummary, PaginatedActivosResult } from '../../domain/mode
 export function toActivo(dto: ActivoDto): Activo {
   return {
     id: dto.id,
+    graphqlId: dto.id,
     codigo: '',
     name: dto.name,
     description: dto.description ?? '',
@@ -61,9 +62,10 @@ export function toActivoSummaryFromRest(dto: ActivoRestListDto): ActivoSummary {
   };
 }
 
-export function toActivoFromRest(dto: ActivoRestListDto): Activo {
+export function toActivoFromRest(dto: ActivoRestListDto, graphqlId = ''): Activo {
   return {
     id: dto.id,
+    graphqlId,
     codigo: dto.codigo ?? '',
     name: dto.name,
     description: dto.description ?? '',

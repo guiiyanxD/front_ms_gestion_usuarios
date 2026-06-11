@@ -9,6 +9,7 @@ export interface AssignedUser {
 
 export interface Activo {
   readonly id: string;
+  readonly graphqlId: string;
   readonly codigo: string;
   readonly name: string;
   readonly description: string;

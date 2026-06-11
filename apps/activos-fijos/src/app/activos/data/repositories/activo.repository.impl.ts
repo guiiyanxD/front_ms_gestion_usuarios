@@ -157,32 +157,35 @@ export class ActivoRepositoryImpl extends ActivoRepository {
       status: input.status,
     };
 
-    return this.http
-      .post<ActivoRestListDto>(`${REST_BASE_URL}/api/v1/activos`, restDto)
-      .pipe(map(toActivoFromRest));
+    const graphqlVars = {
+      acquisitionDate: input.acquisitionDate,
+      category: input.category,
+      name: input.name,
+      status: input.status,
+      description: input.description || null,
+      imageUrl: input.imageUrl || null,
+      location: input.location,
+    };
 
-    // [GraphQL - comentado] usar cuando se requiera volver a GraphQL + REST en paralelo
-    // const graphqlVars = {
-    //   acquisitionDate: input.acquisitionDate,
-    //   category: input.category,
-    //   name: input.name,
-    //   status: input.status,
-    //   description: input.description || null,
-    //   imageUrl: input.imageUrl || null,
-    //   location: input.location,
-    // };
-    // const graphql$ = input.userId
-    //   ? this.apollo
-    //       .mutate<{ createFixedAssetWithUser: ActivoDto }>({
-    //         mutation: CREATE_FIXED_ASSET_WITH_USER,
-    //         variables: { ...graphqlVars, userId: input.userId },
-    //       })
-    //       .pipe(map((result) => toActivo(result.data!.createFixedAssetWithUser)))
-    //   : this.apollo
-    //       .mutate<{ createFixedAsset: ActivoDto }>({ mutation: CREATE_FIXED_ASSET, variables: graphqlVars })
-    //       .pipe(map((result) => toActivo(result.data!.createFixedAsset)));
-    // const rest$ = this.http.post(`${REST_BASE_URL}/api/v1/activos`, restDto);
-    // return forkJoin([graphql$, rest$]).pipe(map(([activo]) => activo));
+    const graphql$ = input.userId
+      ? this.apollo
+          .mutate<{ createFixedAssetWithUser: ActivoDto }>({
+            mutation: CREATE_FIXED_ASSET_WITH_USER,
+            variables: { ...graphqlVars, userId: input.userId },
+          })
+          .pipe(map((r) => r.data!.createFixedAssetWithUser))
+      : this.apollo
+          .mutate<{ createFixedAsset: ActivoDto }>({
+            mutation: CREATE_FIXED_ASSET,
+            variables: graphqlVars,
+          })
+          .pipe(map((r) => r.data!.createFixedAsset));
+
+    const rest$ = this.http.post<ActivoRestListDto>(`${REST_BASE_URL}/api/v1/activos`, restDto);
+
+    return forkJoin([graphql$, rest$]).pipe(
+      map(([graphqlDto, restDto]) => toActivoFromRest(restDto, graphqlDto.id))
+    );
   }
 
   update(id: string, input: UpdateActivoInput): Observable<Activo> {

@@ -132,6 +132,7 @@ export class ActivosStore {
   selectFromList(summary: ActivoSummary): void {
     this._selected.set({
       id: summary.id,
+      graphqlId: '',
       codigo: summary.codigo,
       name: summary.name,
       description: summary.description,
