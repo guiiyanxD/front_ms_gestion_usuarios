@@ -1,0 +1,59 @@
+<main class="page">
+  <header class="page__head">
+    <h1 class="page__title">Reportes</h1>
+    <p class="page__subtitle">Descarga los reportes del sistema de gestión de activos.</p>
+  </header>
+
+  <section class="page__filters">
+    <app-area-search
+      [areas]="areas()"
+      [selectedArea]="selectedArea()"
+      (areaSelected)="onAreaSelected($event)"
+    />
+    <div class="page__dates">
+      <div class="page__date-field">
+        <label class="page__date-label" for="fechaInicio">Desde</label>
+        <input
+          id="fechaInicio"
+          class="page__date-input"
+          type="date"
+          (change)="onFechaInicio($any($event.target).value)"
+        />
+      </div>
+      <div class="page__date-field">
+        <label class="page__date-label" for="fechaFin">Hasta</label>
+        <input
+          id="fechaFin"
+          class="page__date-input"
+          type="date"
+          (change)="onFechaFin($any($event.target).value)"
+        />
+      </div>
+    </div>
+  </section>
+
+  @if (status() === 'error') {
+    <p class="page__alert" role="alert">{{ error() }}</p>
+  }
+
+  @if (status() === 'loading') {
+    <p class="page__msg">Cargando reportes…</p>
+  } @else {
+    @if (error() && status() !== 'error') {
+      <p class="page__alert" role="alert">{{ error() }}</p>
+    }
+    <section class="page__grid">
+      @for (r of reportes(); track r.id) {
+        <app-reporte-card
+          [reporte]="r"
+          [downloadingState]="downloading()"
+          (download)="onDownload($event)"
+        />
+      } @empty {
+        @if (status() !== 'loading') {
+          <p class="page__empty">No hay reportes disponibles.</p>
+        }
+      }
+    </section>
+  }
+</main>

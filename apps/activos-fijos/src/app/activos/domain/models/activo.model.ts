@@ -30,6 +30,7 @@ export interface ActivoSummary {
   readonly category: ActivoCategory;
   readonly status: ActivoStatus;
   readonly location: string;
+  readonly areaId: number;
   readonly areaName: string;
   readonly acquisitionDate: string;
   readonly categoryName: string;

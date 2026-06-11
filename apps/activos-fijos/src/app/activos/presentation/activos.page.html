@@ -21,8 +21,43 @@
   } @else if (status() === 'loading') {
     <p class="activos__msg">Cargando activos…</p>
   } @else {
+
+    <section class="activos__filters">
+      <input
+        class="activos__search"
+        type="search"
+        placeholder="Buscar por nombre o código…"
+        (input)="onSearchInput($any($event.target).value)"
+        (search)="onSearchInput($any($event.target).value)"
+        aria-label="Buscar activo"
+      />
+      <select class="activos__select" (change)="onCategoriaChange($any($event.target).value)" aria-label="Filtrar por categoría">
+        <option value="">Todas las categorías</option>
+        @for (cat of categories; track cat[0]) {
+          <option [value]="cat[0]">{{ cat[1] }}</option>
+        }
+      </select>
+      <select class="activos__select" (change)="onEstadoChange($any($event.target).value)" aria-label="Filtrar por estado">
+        <option value="">Todos los estados</option>
+        @for (est of statuses; track est[0]) {
+          <option [value]="est[0]">{{ est[1] }}</option>
+        }
+      </select>
+      <select class="activos__select" (change)="onAreaChange($any($event.target).value)" aria-label="Filtrar por área">
+        <option value="0">Todas las áreas</option>
+        @for (area of availableAreas(); track area.id) {
+          <option [value]="area.id">{{ area.name }}</option>
+        }
+      </select>
+      <button class="btn btn--ghost btn--sm" type="button" (click)="onClearFilters()">Limpiar</button>
+    </section>
+
+    <p class="activos__count">
+      {{ filteredActivos().length }} de {{ totalElements() }} activos
+    </p>
+
     <app-activo-table
-      [activos]="activos()"
+      [activos]="filteredActivos()"
       (view)="onView($event)"
       (edit)="onEdit($event)"
       (remove)="onDelete($event)"

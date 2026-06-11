@@ -1,0 +1,33 @@
+<div class="area-search">
+  <div class="area-search__field">
+    <input
+      class="area-search__input"
+      type="text"
+      placeholder="Filtrar por área…"
+      [value]="displayValue()"
+      (input)="onInput($any($event.target).value)"
+      (focus)="open.set(true)"
+      (blur)="onBlur()"
+      aria-label="Buscar área"
+      autocomplete="off"
+    />
+    @if (selectedArea()) {
+      <button class="area-search__clear" type="button" (click)="clear()" aria-label="Limpiar área">✕</button>
+    }
+  </div>
+
+  @if (open() && filtered().length) {
+    <ul class="area-search__dropdown" role="listbox">
+      @for (area of filtered(); track area.id) {
+        <li
+          class="area-search__option"
+          role="option"
+          (mousedown)="select(area)"
+        >
+          <span class="area-search__codigo">{{ area.codigo }}</span>
+          {{ area.nombre }}
+        </li>
+      }
+    </ul>
+  }
+</div>

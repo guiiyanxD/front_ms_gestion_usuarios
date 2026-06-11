@@ -18,9 +18,18 @@
       "profile/Routes": ["./apps/profile/src/app/remote-entry/entry.routes.ts"],
       "roles/Routes": ["./apps/roles/src/app/remote-entry/entry.routes.ts"],
       "users/Routes": ["./apps/users/src/app/remote-entry/entry.routes.ts"],
-      "activos-fijos/Routes": ["./apps/activos-fijos/src/app/remote-entry/entry.routes.ts"],
-      "mantenimientos/Routes": ["./apps/mantenimientos/src/app/remote-entry/entry.routes.ts"],
-      "estadisticas/Routes": ["./apps/estadisticas/src/app/remote-entry/entry.routes.ts"]
+      "activos-fijos/Routes": [
+        "./apps/activos-fijos/src/app/remote-entry/entry.routes.ts"
+      ],
+      "mantenimientos/Routes": [
+        "./apps/mantenimientos/src/app/remote-entry/entry.routes.ts"
+      ],
+      "estadisticas/Routes": [
+        "./apps/estadisticas/src/app/remote-entry/entry.routes.ts"
+      ],
+      "reportes/Routes": [
+        "./apps/reportes/src/app/remote-entry/entry.routes.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

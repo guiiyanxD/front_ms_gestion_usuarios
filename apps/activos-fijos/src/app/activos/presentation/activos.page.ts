@@ -3,7 +3,23 @@ import { Router } from '@angular/router';
 import { ActivoTableComponent } from './ui/activo-table/activo-table.component';
 import { ActivoFormComponent } from './ui/activo-form/activo-form.component';
 import { ActivosStore } from '../state/activos.store';
-import { Activo, ActivoSummary, CreateActivoInput, UpdateActivoInput } from '../domain/models/activo.model';
+import { Activo, ActivoCategory, ActivoStatus, ActivoSummary, CreateActivoInput, UpdateActivoInput } from '../domain/models/activo.model';
+
+const CATEGORY_LABELS: Record<ActivoCategory, string> = {
+  ELECTRONIC_EQUIPMENT: 'Equipo electrónico',
+  HVAC_EQUIPMENT: 'Equipo HVAC',
+  FIXTURES: 'Instalaciones',
+  OTHERS: 'Otros',
+};
+
+const STATUS_LABELS: Record<ActivoStatus, string> = {
+  ACTIVE: 'Activo',
+  IN_STORAGE: 'En almacén',
+  UNDER_MAINTENANCE: 'En mantenimiento',
+  DAMAGED: 'Dañado',
+  RETIRED: 'Retirado',
+  LOST: 'Perdido',
+};
 
 @Component({
   selector: 'app-activos-page',
@@ -16,8 +32,10 @@ import { Activo, ActivoSummary, CreateActivoInput, UpdateActivoInput } from '../
 export class ActivosPage implements OnInit {
   private readonly store = inject(ActivosStore);
   private readonly router = inject(Router);
+  private searchTimer: ReturnType<typeof setTimeout> | null = null;
 
-  readonly activos = this.store.activos;
+  readonly filteredActivos = this.store.filteredActivos;
+  readonly availableAreas = this.store.availableAreas;
   readonly status = this.store.status;
   readonly error = this.store.error;
   readonly isSaving = this.store.isSaving;
@@ -27,6 +45,9 @@ export class ActivosPage implements OnInit {
   readonly hasNext = this.store.hasNext;
   readonly hasPrevious = this.store.hasPrevious;
   readonly userOptions = this.store.userOptions;
+
+  readonly categories = Object.entries(CATEGORY_LABELS) as [ActivoCategory, string][];
+  readonly statuses = Object.entries(STATUS_LABELS) as [ActivoStatus, string][];
 
   readonly showForm = signal(false);
   readonly editingActivo = signal<Activo | null>(null);
@@ -44,6 +65,27 @@ export class ActivosPage implements OnInit {
   ngOnInit(): void {
     this.store.load();
     this.store.loadUserOptions();
+  }
+
+  onSearchInput(value: string): void {
+    if (this.searchTimer) clearTimeout(this.searchTimer);
+    this.searchTimer = setTimeout(() => this.store.setSearch(value), 300);
+  }
+
+  onCategoriaChange(value: string): void {
+    this.store.setFilterCategoria(value as ActivoCategory | '');
+  }
+
+  onEstadoChange(value: string): void {
+    this.store.setFilterEstado(value as ActivoStatus | '');
+  }
+
+  onAreaChange(value: string): void {
+    this.store.setFilterAreaId(Number(value));
+  }
+
+  onClearFilters(): void {
+    this.store.clearFilters();
   }
 
   onNew(): void {

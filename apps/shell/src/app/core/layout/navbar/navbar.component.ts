@@ -31,9 +31,15 @@ export class NavbarComponent {
   readonly openDropdown = signal<string | null>(null);
 
   private readonly allItems: MenuItem[] = [
-    { label: 'Perfil', path: '/profile' },
-    { label: 'Roles', path: '/roles', roles: ['SUPERADMIN', 'GERENTE'] },
-    { label: 'Usuarios', path: '/users', roles: ['SUPERADMIN', 'GERENTE'] },
+    {
+      label: 'Usuarios',
+      roles: ['SUPERADMIN', 'GERENTE'],
+      children: [
+        { label: 'Perfil', path: '/profile' },
+        { label: 'Roles', path: '/roles' },
+        { label: 'Usuarios', path: '/users' },
+      ],
+    },
     { label: 'Activos Fijos', path: '/activos-fijos', roles: ['SUPERADMIN', 'GERENTE', 'TECNICO', 'ASISTENTE', 'OPERADOR'] },
     {
       label: 'Mantenimientos',
@@ -43,7 +49,14 @@ export class NavbarComponent {
         { label: 'Mis solicitudes', path: '/mantenimientos/mis-solicitudes' },
       ],
     },
-    { label: 'Estadísticas', path: '/estadisticas', roles: ['SUPERADMIN', 'GERENTE'] },
+    {
+      label: 'Business Intelligence',
+      roles: ['SUPERADMIN', 'GERENTE'],
+      children: [
+        { label: 'Estadísticas', path: '/estadisticas' },
+        { label: 'Reportes', path: '/reportes' },
+      ],
+    },
   ];
 
   readonly visibleItems = computed(() => {

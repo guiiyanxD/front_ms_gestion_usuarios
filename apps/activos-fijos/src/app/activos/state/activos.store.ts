@@ -6,12 +6,17 @@ import { UpdateActivoUseCase } from '../domain/use-cases/update-activo.use-case'
 import { DeleteActivoUseCase } from '../domain/use-cases/delete-activo.use-case';
 import { AssignUserUseCase } from '../domain/use-cases/assign-user.use-case';
 import { ListUserOptionsUseCase } from '../domain/use-cases/list-user-options.use-case';
-import { Activo, ActivoSummary, CreateActivoInput, UpdateActivoInput } from '../domain/models/activo.model';
+import { Activo, ActivoCategory, ActivoStatus, ActivoSummary, CreateActivoInput, UpdateActivoInput } from '../domain/models/activo.model';
 import { UserOption } from '../domain/models/user-option.model';
 
 type Status = 'idle' | 'loading' | 'saving' | 'error';
 
 const PAGE_SIZE = 10;
+
+export interface AreaOption {
+  id: number;
+  name: string;
+}
 
 @Injectable()
 export class ActivosStore {
@@ -35,6 +40,11 @@ export class ActivosStore {
   private readonly _hasPrevious = signal(false);
   private readonly _userOptions = signal<UserOption[]>([]);
 
+  private readonly _search = signal('');
+  private readonly _filterCategoria = signal<ActivoCategory | ''>('');
+  private readonly _filterEstado = signal<ActivoStatus | ''>('');
+  private readonly _filterAreaId = signal<number>(0);
+
   readonly activos = this._activos.asReadonly();
   readonly selected = this._selected.asReadonly();
   readonly editTarget = this._editTarget.asReadonly();
@@ -48,6 +58,44 @@ export class ActivosStore {
   readonly userOptions = this._userOptions.asReadonly();
   readonly isLoading = computed(() => this._status() === 'loading');
   readonly isSaving = computed(() => this._status() === 'saving');
+  readonly search = this._search.asReadonly();
+  readonly filterCategoria = this._filterCategoria.asReadonly();
+  readonly filterEstado = this._filterEstado.asReadonly();
+  readonly filterAreaId = this._filterAreaId.asReadonly();
+
+  readonly availableAreas = computed<AreaOption[]>(() => {
+    const seen = new Set<number>();
+    return this._activos()
+      .filter((a) => a.areaId && !seen.has(a.areaId) && !!seen.add(a.areaId))
+      .map((a) => ({ id: a.areaId, name: a.areaName }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  });
+
+  readonly filteredActivos = computed<ActivoSummary[]>(() => {
+    const q = this._search().toLowerCase().trim();
+    const cat = this._filterCategoria();
+    const est = this._filterEstado();
+    const areaId = this._filterAreaId();
+
+    return this._activos().filter((a) => {
+      if (q && !a.name.toLowerCase().includes(q) && !a.codigo.toLowerCase().includes(q)) return false;
+      if (cat && a.category !== cat) return false;
+      if (est && a.status !== est) return false;
+      if (areaId && a.areaId !== areaId) return false;
+      return true;
+    });
+  });
+
+  setSearch(v: string): void { this._search.set(v); }
+  setFilterCategoria(v: ActivoCategory | ''): void { this._filterCategoria.set(v); }
+  setFilterEstado(v: ActivoStatus | ''): void { this._filterEstado.set(v); }
+  setFilterAreaId(v: number): void { this._filterAreaId.set(v); }
+  clearFilters(): void {
+    this._search.set('');
+    this._filterCategoria.set('');
+    this._filterEstado.set('');
+    this._filterAreaId.set(0);
+  }
 
   loadUserOptions(): void {
     this.listUsersUC.execute().subscribe({

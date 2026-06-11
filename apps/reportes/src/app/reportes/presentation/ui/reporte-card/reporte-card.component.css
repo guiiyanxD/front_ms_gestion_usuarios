@@ -1,0 +1,60 @@
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.card:hover {
+  border-color: #c7d2fe;
+  box-shadow: 0 4px 16px rgba(67, 56, 202, .08);
+}
+.card__icon {
+  font-size: 32px;
+  line-height: 1;
+}
+.card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.card__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-ink, #0f172a);
+  margin: 0;
+}
+.card__desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+}
+.card__actions {
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  flex: 1;
+  height: 36px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn--excel {
+  background: #16a34a;
+  color: #fff;
+}
+.btn--excel:hover:not(:disabled) { background: #15803d; }
+.btn--pdf {
+  background: #dc2626;
+  color: #fff;
+}
+.btn--pdf:hover:not(:disabled) { background: #b91c1c; }
